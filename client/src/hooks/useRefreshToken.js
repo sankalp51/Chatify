@@ -8,7 +8,8 @@ export default function useRefreshToken() {
         setAuth(prevState => {
             return {
                 ...prevState,
-                accessToken: response.data.accessToken
+                accessToken: response.data.accessToken,
+                user: response.data.user
             }
         });
         return response.data.accessToken;

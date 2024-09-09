@@ -9,7 +9,6 @@ export default function AuthProvider({ children }) {
         user: ""
     });
 
-    console.log(auth);
     return (
         <AuthContext.Provider value={{ auth, setAuth }}>
             {children}
