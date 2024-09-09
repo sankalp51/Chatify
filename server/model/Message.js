@@ -1,4 +1,3 @@
-// models/Message.js
 const mongoose = require('mongoose');
 
 const messageSchema = new mongoose.Schema({
@@ -7,7 +6,7 @@ const messageSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    reciever: {
+    receiver: {  // Corrected spelling from 'reciever' to 'receiver'
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
@@ -18,5 +17,5 @@ const messageSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-const Conversations = mongoose.model('Message', messageSchema);
-module.exports = Conversations;
+const Message = mongoose.model('Message', messageSchema);
+module.exports = Message;
