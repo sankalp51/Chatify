@@ -36,14 +36,26 @@ const logIn = async (req, res, next) => {
 
 const signUp = async (req, res, next) => {
     try {
-        const { username, password } = req.body;
+        const { fullName, username, password, gender, confirmPassword } = req.body;
         if (!username || !password) return res.status(400).json({ message: "username and password required" });
 
+        if (password.trim() !== confirmPassword.trim()) return res.status(400).json({ message: "Passwords do not match" });
         const duplicate = await User.findOne({ username }).lean().exec();
         if (duplicate) return res.status(409).json({ message: "user already exists" });
 
         const hashPwd = await bcrypt.hash(password, 10);
-        const newUser = new User({ username, password: hashPwd });
+
+        const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
+        const girlProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`;
+
+
+        const newUser = new User({
+            fullName,
+            gender,
+            username,
+            password: hashPwd,
+            profilePic: gender === "Male" ? boyProfilePic : girlProfilePic
+        });
         await newUser.save();
         res.status(201).json({ message: "Registration successfull!" });
     } catch (error) {

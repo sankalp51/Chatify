@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { useState } from "react";
@@ -11,13 +12,20 @@ export default function Login() {
     const location = useLocation();
     const navigate = useNavigate();
     const from = location.state?.from?.pathname || "/";
-    const { setAuth } = useAuth();
+    const { auth, setAuth } = useAuth(); // Destructure auth to check authentication state
     const [credentials, setCredentials] = useState({
         username: "",
         password: ""
     });
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        // If the user is already authenticated, redirect them
+        if (auth?.accessToken) {
+            navigate(from, { replace: true });
+        }
+    }, [auth, navigate, from]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -26,7 +34,6 @@ export default function Login() {
             [name]: value
         }));
 
-        // Clear error for the field being modified
         setErrors((prevErrors) => ({
             ...prevErrors,
             [name]: ""
@@ -71,36 +78,36 @@ export default function Login() {
     };
 
     return (
-        <main className="bg-blue-50 h-screen flex items-center justify-center">
-            <form className="w-80 mx-auto p-6 bg-white rounded-lg shadow-lg" onSubmit={handleSubmit}>
-                <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+        <main className="bg-base-200 min-h-screen flex items-center justify-center">
+            <form className="w-full max-w-md p-8 bg-base-100 rounded-lg shadow-lg" onSubmit={handleSubmit}>
+                <h2 className="text-2xl font-bold mb-6 text-center text-primary">Login</h2>
                 <Input
                     value={credentials.username}
                     onChange={handleChange}
                     type="text"
                     name="username"
                     placeholder="Username"
-                    className={`block w-full rounded-sm p-2 mb-2 border ${errors.username ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`input input-bordered w-full mb-2 ${errors.username ? 'input-error' : ''}`}
                 />
-                {errors.username && <p className="text-red-500 text-sm mb-2">{errors.username}</p>}
+                {errors.username && <p className="text-error text-sm mb-2">{errors.username}</p>}
                 <Input
                     value={credentials.password}
                     onChange={handleChange}
                     type="password"
                     name="password"
                     placeholder="Password"
-                    className={`block w-full rounded-sm p-2 mb-2 border ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`input input-bordered w-full mb-2 ${errors.password ? 'input-error' : ''}`}
                 />
-                {errors.password && <p className="text-red-500 text-sm mb-2">{errors.password}</p>}
+                {errors.password && <p className="text-error text-sm mb-2">{errors.password}</p>}
                 <Button
                     name={isSubmitting ? "Logging in..." : "Login"}
                     type="submit"
-                    className="bg-blue-500 text-white block w-full rounded-sm p-2 mt-4 hover:bg-blue-600"
+                    className="btn btn-primary w-full mt-4"
                     disabled={isSubmitting}
                 />
                 <div className="mt-4 text-center">
                     <p className="text-sm text-gray-600">
-                        Don&apos;t have an account? <Link to="/signup" className="text-blue-500 hover:underline">Sign up</Link>
+                        Don&apos;t have an account? <Link to="/signup" className="text-primary hover:underline">Sign up</Link>
                     </p>
                 </div>
             </form>
