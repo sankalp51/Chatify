@@ -12,8 +12,8 @@ const messagesRoutes = require("./routes/messagesRoutes");
 const userRoutes = require('./routes/userRoutes');
 const credentials = require("./middlewares/credentials");
 const errorHandler = require('./middlewares/errorHandler');
+const { app, server } = require('./socket/socket');
 
-const app = express();
 
 //db connection
 connectDb(process.env.DATABASE_URL);
@@ -54,7 +54,7 @@ app.all("*", (req, res) => {
 });
 
 mongoose.connection.once("open", () => {
-    app.listen(3000, () => {
+    server.listen(3000, () => {
         console.log("server started on port 3000");
     });
 
