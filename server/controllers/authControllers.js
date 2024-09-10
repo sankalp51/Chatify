@@ -26,7 +26,7 @@ const logIn = async (req, res, next) => {
 
         await User.findOneAndUpdate({ username }, { refreshToken }).lean().exec();
         res.cookie("chatapptoken", refreshToken, { httpOnly: true, sameSite: "None", secure: true, maxAge: 24 * 60 * 60 * 1000 });
-        res.status(200).json({ accessToken, user: username });
+        res.status(200).json({ accessToken, user: username, id: existingUser._id, profilePic: existingUser.profilePic });
 
 
     } catch (error) {
