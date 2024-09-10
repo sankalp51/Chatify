@@ -6,9 +6,9 @@ export default function Conversations() {
   return (
     <section className="flex flex-col space-y-2 overflow-auto">
       {loading && <span className="loading loading-spinner mx-auto"></span>}
-      {!loading && conversations.map(convo=>{
-        return(
-          <Conversation key={convo._id} {...convo}/>
+      {!loading && conversations.map(convo => {
+        return (
+          <Conversation key={convo._id} {...convo} />
         )
       })}
     </section>

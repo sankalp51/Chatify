@@ -61,7 +61,7 @@ export default function Login() {
                 });
                 const accessToken = response?.data?.accessToken;
                 const user = response?.data?.user;
-                setAuth({ accessToken, user });
+                setAuth({ accessToken, user, id: response?.data?.id, profilePic: response?.data?.profilePic });
                 toast.success("Successfully logged in");
                 navigate(from, { replace: true });
             } catch (error) {

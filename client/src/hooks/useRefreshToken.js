@@ -9,7 +9,9 @@ export default function useRefreshToken() {
             return {
                 ...prevState,
                 accessToken: response.data.accessToken,
-                user: response.data.user
+                user: response.data.user,
+                id: response.data.id,
+                profilePic: response.data.profilePic
             }
         });
         return response.data.accessToken;

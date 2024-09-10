@@ -6,7 +6,9 @@ export const AuthContext = createContext({});
 export default function AuthProvider({ children }) {
     const [auth, setAuth] = useState({
         accessToken: "",
-        user: ""
+        user: "",
+        id: "",
+        profilePic: ""
     });
 
     return (
