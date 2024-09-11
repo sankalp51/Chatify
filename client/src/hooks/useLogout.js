@@ -8,7 +8,11 @@ export default function useLogout() {
         setAuth(prevState => {
             return {
                 ...prevState,
-                accessToken: ""
+                accessToken: "",
+                user: "",
+                id: "",
+                profilePic: ""
+
             }
         });
         try {

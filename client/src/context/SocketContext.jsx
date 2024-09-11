@@ -11,8 +11,15 @@ export default function SocketContextProvider({ children }) {
 
     useEffect(() => {
         if (auth?.user) {
-            const socket = io(import.meta.env.VITE_API_BASE_URL);
+            const socket = io(import.meta.env.VITE_API_BASE_URL, {
+                query: {
+                    userId: auth.id
+                }
+            });
             setSocket(socket);
+            socket.on("getOnlineUsers", users => {
+                setOnlineUsers(users);
+            })
             return () => socket.close();
         }
         else {
