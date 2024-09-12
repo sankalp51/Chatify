@@ -1,8 +1,8 @@
-const allowedOrigin = ["http://localhost:5173"];
+const allowedOrigin = ["https://chat-app-zeta-red.vercel.app"];
 
 const corsConfig = {
     origin: function (origin, callback) {
-        if (allowedOrigin.indexOf(origin) !== -1 || !origin) {
+        if (allowedOrigin.indexOf(origin) !== -1) {
             callback(null, true);
         }
         else {
