@@ -18,6 +18,8 @@ const { app, server } = require('./socket/socket');
 //db connection
 connectDb(process.env.DATABASE_URL);
 
+const PORT = process.env.PORT || 3000;
+
 //middlewares
 app.use(credentials);
 app.use(cors(corsConfig));
@@ -27,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(errorHandler);
 
-app.get("^/$|^/index(.html)?", (req, res) => {
+app.get("/", (req, res) => {
     if (req.accepts("html")) {
         res.status(200).sendFile(path.join(__dirname, "views", "hello.html"));
     } else if (req.accepts("json")) {
@@ -54,7 +56,7 @@ app.all("*", (req, res) => {
 });
 
 mongoose.connection.once("open", () => {
-    server.listen(3000, () => {
+    server.listen(PORT, () => {
         console.log("server started on port 3000");
     });
 
