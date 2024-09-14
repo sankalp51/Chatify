@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import axios from "../api/axios";
+import { IoEye } from "react-icons/io5";
+import { IoMdEyeOff } from "react-icons/io";
 
 export default function Register() {
     const REGISTER_URL = "/api/auth/register";
@@ -16,6 +18,8 @@ export default function Register() {
     });
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -91,23 +95,43 @@ export default function Register() {
                     className={`input input-bordered w-full mb-2 ${errors.username ? 'input-error' : ''}`}
                 />
                 {errors.username && <p className="text-error text-sm mb-2">{errors.username}</p>}
-                <Input
-                    value={credentials.password}
-                    onChange={handleChange}
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    className={`input input-bordered w-full mb-2 ${errors.password ? 'input-error' : ''}`}
-                />
+
+                <div className="relative mb-2">
+                    <Input
+                        value={credentials.password}
+                        onChange={handleChange}
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        placeholder="Password"
+                        className={`input input-bordered w-full ${errors.password ? 'input-error' : ''}`}
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-3 text-xl"
+                    >
+                        {showPassword ? <IoEye /> : <IoMdEyeOff />}
+                    </button>
+                </div>
                 {errors.password && <p className="text-error text-sm mb-2">{errors.password}</p>}
-                <Input
-                    value={credentials.confirmPassword}
-                    onChange={handleChange}
-                    type="password"
-                    name="confirmPassword"
-                    placeholder="Confirm Password"
-                    className={`input input-bordered w-full mb-2 ${errors.confirmPassword ? 'input-error' : ''}`}
-                />
+
+                <div className="relative mb-2">
+                    <Input
+                        value={credentials.confirmPassword}
+                        onChange={handleChange}
+                        type={showConfirmPassword ? "text" : "password"}
+                        name="confirmPassword"
+                        placeholder="Confirm Password"
+                        className={`input input-bordered w-full ${errors.confirmPassword ? 'input-error' : ''}`}
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-3 top-3 text-xl"
+                    >
+                        {showConfirmPassword ? <IoEye /> : <IoMdEyeOff />}
+                    </button>
+                </div>
                 {errors.confirmPassword && <p className="text-error text-sm mb-2">{errors.confirmPassword}</p>}
 
                 <div className="mb-2">
