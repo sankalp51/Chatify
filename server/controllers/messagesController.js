@@ -1,17 +1,17 @@
 const Conversations = require('../model/Conversations');
 const Message = require("../model/Message");
-const User = require('../model/User');  // Assuming you have a User model
+const User = require('../model/User'); 
 const { getRecieverSokcetId, io } = require('../socket/socket');
 
 const sendMessage = async (req, res, next) => {
     try {
         const { message } = req.body;
-        const { id: recipientId } = req.params;  // Assuming 'id' is the recipient's ObjectId (or username)
-        const username = req.user;  // The sender's username
+        const { id: recipientId } = req.params;  
+        const username = req.user;  
 
-        // Find the sender and recipient by their username or ObjectId
+
         const sender = await User.findOne({ username });
-        const recipient = await User.findById(recipientId);  // Assuming 'id' is the recipient's ObjectId
+        const recipient = await User.findById(recipientId); 
 
         if (!sender || !recipient) {
             return res.status(404).json({ error: "User not found" });

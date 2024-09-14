@@ -1,19 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setUsers } from "../redux/features/usersSlice";
 import useAxiosPrivate from "./useAxiosPrivate";
+import { toast } from "sonner";
 
-const useFetchUsers = () => {
-  const [users, setUsers] = useState([]);
+export default function useGetUsers() {
   const axios = useAxiosPrivate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // Fetch available users
-    axios
-      .get("/api/users") // Adjust the URL as necessary
-      .then((response) => setUsers(response.data))
-      .catch((error) => console.error("Error fetching users:", error));
-  }, []);
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("/api/users");
+        dispatch(setUsers(response.data));
+      } catch (error) {
+        toast.error("Error fetching users");
+      }
+    };
 
-  return users;
-};
-
-export default useFetchUsers;
+    fetchUsers();
+  }, [axios, dispatch]);
+}
