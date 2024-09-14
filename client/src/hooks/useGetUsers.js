@@ -9,7 +9,6 @@ export default function useGetUsers() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Fetch available users
     const fetchUsers = async () => {
       try {
         const response = await axios.get("/api/users");

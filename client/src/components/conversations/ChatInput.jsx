@@ -1,0 +1,68 @@
+import { useState } from "react";
+import { FiSend } from "react-icons/fi";
+import { MdOutlineEmojiEmotions } from "react-icons/md";
+import EmojiPicker from "emoji-picker-react";
+import useTheme from "../../hooks/useTheme";
+
+export default function ChatInput({
+  messageInput,
+  setMessageInput,
+  handleSendMessage,
+  emitTyping,
+  selectedUser,
+}) {
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const { theme } = useTheme();
+
+  const handleInputChange = (e) => {
+    setMessageInput(e.target.value);
+    emitTyping(selectedUser._id, e.target.value.length > 0);
+  };
+
+  const handleEmojiClick = (emojiObject) => {
+    setMessageInput((prevInput) => prevInput + emojiObject.emoji);
+    setShowEmojiPicker(false);
+  };
+
+  // Handle key press (Enter) to send a message
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSendMessage();
+    }
+  };
+
+  return (
+    <div className="mt-4 flex items-center space-x-2 relative">
+      <button
+        onClick={() => setShowEmojiPicker((prev) => !prev)}
+        className="p-3 rounded-full bg-transparent hover:bg-primary hover:text-white flex items-center justify-center"
+      >
+        <MdOutlineEmojiEmotions size={24} />
+      </button>
+      {showEmojiPicker && (
+        <div className="absolute bottom-14 left-0">
+          <EmojiPicker
+            onEmojiClick={handleEmojiClick}
+            emojiStyle="native"
+            theme={theme}
+            lazyLoadEmojis
+          />
+        </div>
+      )}
+      <input
+        type="text"
+        placeholder="Type your message..."
+        value={messageInput}
+        onChange={handleInputChange}
+        onKeyDown={handleKeyPress}
+        className="w-full p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+      />
+      <button
+        onClick={handleSendMessage}
+        className="p-3 rounded-full bg-primary text-white hover:bg-primary-focus flex items-center justify-center"
+      >
+        <FiSend size={20} />
+      </button>
+    </div>
+  );
+}

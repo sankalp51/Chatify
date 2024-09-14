@@ -1,29 +1,36 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import useAxiosPrivate from "./useAxiosPrivate";
+import { setMessages, setStatus, clearMessages } from "../redux/features/messageSlice";
 import { toast } from "sonner";
 
 export default function useFetchMessages(userId) {
-  const [messages, setMessages] = useState([]);
-  const [status, setStatus] = useState("idle"); // 'idle' | 'loading' | 'succeeded' | 'failed'
   const axios = useAxiosPrivate();
+  const dispatch = useDispatch();
+
+  // Get the messages and status from Redux
+  const messages = useSelector((state) => state.messages.messages);
+  const status = useSelector((state) => state.messages.status);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) {
+      dispatch(clearMessages());
+      return;
+    }
 
     const fetchMessages = async () => {
-      setStatus("loading");
+      dispatch(setStatus("loading"));
       try {
-        const response = await axios.get(`api/messages/${userId}`);
-        setMessages(response.data);
-        setStatus("succeeded");
+        const response = await axios.get(`/api/messages/${userId}`);
+        dispatch(setMessages(response.data));
       } catch (error) {
         toast.error("Failed to fetch messages");
-        setStatus("failed");
+        dispatch(setStatus("failed"));
       }
     };
 
     fetchMessages();
-  }, [userId]);
+  }, [userId, axios, dispatch]);
 
   return { messages, status };
 }

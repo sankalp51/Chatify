@@ -9,7 +9,7 @@ export default function Sidebar() {
   const { auth } = useAuth();
   const userId = auth.id;
   useGetUsers(); // Fetch users using the custom hook (will dispatch users to Redux)
-  const onlineUsers = useSocket(userId);
+  const { onlineUsers } = useSocket(userId);
 
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users.users); // Get users from Redux
