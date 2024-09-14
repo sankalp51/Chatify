@@ -1,11 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Input from "../components/Input";
 import Button from "../components/Button";
-import { useState } from "react";
 import { toast } from "sonner";
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
 import { useLocation, useNavigate, Link } from "react-router-dom";
+import { IoEye } from "react-icons/io5";
+import { IoMdEyeOff } from "react-icons/io";
 
 export default function Login() {
     const LOGIN_URI = "/api/auth/login";
@@ -13,6 +14,7 @@ export default function Login() {
     const navigate = useNavigate();
     const from = location.state?.from?.pathname || "/";
     const { auth, setAuth } = useAuth(); // Destructure auth to check authentication state
+    const [showPassword, setShowPassword] = useState(false);
     const [credentials, setCredentials] = useState({
         username: "",
         password: ""
@@ -90,14 +92,23 @@ export default function Login() {
                     className={`input input-bordered w-full mb-2 ${errors.username ? 'input-error' : ''}`}
                 />
                 {errors.username && <p className="text-error text-sm mb-2">{errors.username}</p>}
-                <Input
-                    value={credentials.password}
-                    onChange={handleChange}
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    className={`input input-bordered w-full mb-2 ${errors.password ? 'input-error' : ''}`}
-                />
+                <div className="relative">
+                    <Input
+                        value={credentials.password}
+                        onChange={handleChange}
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        placeholder="Password"
+                        className={`input input-bordered w-full mb-2 ${errors.password ? 'input-error' : ''}`}
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-3 text-xl"
+                    >
+                        {showPassword ? <IoEye /> : <IoMdEyeOff />}
+                    </button>
+                </div>
                 {errors.password && <p className="text-error text-sm mb-2">{errors.password}</p>}
                 <Button
                     name={isSubmitting ? "Logging in..." : "Login"}

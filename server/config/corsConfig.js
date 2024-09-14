@@ -1,4 +1,4 @@
-const allowedOrigin = ["https://chat-app-zeta-red.vercel.app"];
+const allowedOrigin = [process.env.CLIENT_ENDPOINT];
 
 const corsConfig = {
     origin: function (origin, callback) {
