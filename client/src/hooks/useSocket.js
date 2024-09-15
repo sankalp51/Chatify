@@ -14,26 +14,24 @@ export default function useSocket() {
   useEffect(() => {
     if (!auth?.user || !auth?.accessToken) return;
 
-
     socketRef.current = io(import.meta.env.VITE_API_BASE_URL, {
       query: { userId: auth.id },
     });
 
-  
+    // Listen for online users
     socketRef.current.on("getOnlineUsers", (onlineUserIds) => {
       setOnlineUsers(onlineUserIds);
     });
 
-
+    // Listen for typing events
     socketRef.current.on("typing", ({ senderId, isTyping }) => {
       setTypingInfo({ isTyping, senderId });
     });
 
-
+    // Listen for new messages
     socketRef.current.on("newMessage", (message) => {
       dispatch(addMessage(message)); 
     });
-
 
     return () => {
       if (socketRef.current) {
@@ -42,11 +40,30 @@ export default function useSocket() {
     };
   }, [auth, dispatch]);
 
+  // Emit typing event
   const emitTyping = (recipientId, isTyping) => {
     if (socketRef.current) {
       socketRef.current.emit("typing", { recipientId, isTyping });
     }
   };
 
-  return { onlineUsers, typingInfo, emitTyping };
+  // Emit sendMessage event
+  const emitSendMessage = (recipientId, message, callback) => {
+    if (socketRef.current) {
+      socketRef.current.emit(
+        "sendMessage", 
+        { recipientId, message, username: auth.user }, 
+        (response) => {
+          if (response.status === 201) {
+            dispatch(addMessage(response.message)); // Add message to Redux store
+          } else {
+            console.error("Failed to send message:", response.error);
+          }
+          if (callback) callback(response);
+        }
+      );
+    }
+  };
+
+  return { onlineUsers, typingInfo, emitTyping, emitSendMessage };
 }
