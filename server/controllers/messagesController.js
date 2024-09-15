@@ -1,58 +1,5 @@
 const Conversations = require('../model/Conversations');
-const Message = require("../model/Message");
 const User = require('../model/User'); 
-const { getRecieverSokcetId, io } = require('../socket/socket');
-
-const sendMessage = async (req, res, next) => {
-    try {
-        const { message } = req.body;
-        const { id: recipientId } = req.params;  
-        const username = req.user;  
-
-        const sender = await User.findOne({ username });
-        const recipient = await User.findById(recipientId); 
-
-        if (!sender || !recipient) {
-            return res.status(404).json({ error: "User not found" });
-        }
-
-        let conversation = await Conversations.findOne({
-            participants: { $all: [sender._id, recipient._id] }
-        });
-
-        if (!conversation) {
-            conversation = await Conversations.create({
-                participants: [sender._id, recipient._id]
-            });
-        }
-
-        const newMessage = new Message({
-            sender: sender._id,
-            receiver: recipient._id,
-            message
-        });
-
-        conversation.messages.push(newMessage);
-
-        await Promise.all([conversation.save(), newMessage.save()]);
-
-        const recipientSocketId = getRecieverSokcetId(recipient._id);
-        const senderSocketId = getRecieverSokcetId(sender._id);
-        
-        if (recipientSocketId) {
-            io.to(recipientSocketId).emit("newMessage", newMessage);
-        }
-        if (senderSocketId) {
-            io.to(senderSocketId).emit("newMessage", newMessage);
-        }
-
-        res.status(201).json(newMessage);
-    } catch (error) {
-        next(error);
-    }
-};
-
-
 
 
 const getMessage = async (req, res, next) => {
@@ -82,4 +29,4 @@ const getMessage = async (req, res, next) => {
 };
 
 
-module.exports = { sendMessage, getMessage };
+module.exports = { getMessage };

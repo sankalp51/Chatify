@@ -2,8 +2,6 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useAuth from "../../hooks/useAuth";
 import useSocket from "../../hooks/useSocket";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { addMessage } from "../../redux/features/messageSlice";
 import debounce from "lodash.debounce";
 import ChatBubble from "./ChatBubble";
 import ChatInput from "./ChatInput";
@@ -13,13 +11,11 @@ import { memo } from "react";
 
 const ChatWindow = () => {
   const { auth } = useAuth();
-  const axios = useAxiosPrivate();
   const userId = auth.id;
-
   const selectedUser = useSelector((state) => state.users.selectedUser);
   const messages = useSelector((state) => state.messages.messages);
   const status = useSelector((state) => state.messages.status);
-  const { emitTyping, typingInfo, onlineUsers } = useSocket();
+  const { emitTyping, typingInfo, onlineUsers, emitSendMessage } = useSocket();
   const [messageInput, setMessageInput] = useState("");
   const dispatch = useDispatch();
   const chatEndRef = useRef(null);
@@ -32,20 +28,16 @@ const ChatWindow = () => {
     [emitTyping]
   );
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = () => {
     if (messageInput.trim() === "") return;
-    try {
-      const response = await axios.post(
-        `/api/messages/send/${selectedUser._id}`,
-        { message: messageInput },
-        { headers: { "Content-Type": "application/json" } }
-      );
-      dispatch(addMessage(response.data));
-      setMessageInput("");
-      emitTypingDebounced(selectedUser._id, false);
-    } catch (error) {
-      console.error("Failed to send message", error);
-    }
+    emitSendMessage(selectedUser._id, messageInput, (response) => {
+      if (response.status === 201) {
+        setMessageInput("");
+        emitTypingDebounced(selectedUser._id, false);
+      } else {
+        console.error("Failed to send message:", response.error);
+      }
+    });
   };
 
   useEffect(() => {
