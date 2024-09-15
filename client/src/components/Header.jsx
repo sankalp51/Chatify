@@ -57,7 +57,7 @@ export default function Header() {
         </div>
       </Modal>
       <Link to="/" className="text-2xl font-bold text-primary mb-2 md:mb-0">
-        Chat App
+        Chattify
       </Link>
       <div className="flex items-center space-x-2">
         <span className="mr-4">
@@ -74,4 +74,3 @@ export default function Header() {
     </header>
   );
 }
-
