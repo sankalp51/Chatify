@@ -1,27 +1,32 @@
 import format from "date-fns/format";
+import classNames from "classnames";
+import { memo } from "react";
 
-export default function ChatBubble({
-  message,
-  senderId,
-  currentUserId,
-  selectedUser,
-}) {
+const ChatBubble = ({ message, senderId, currentUserId, selectedUser }) => {
+  // Determine if the message is from the current user
+  const isCurrentUser = message.sender === currentUserId;
+
   return (
     <div
-      className={`chat ${
-        message.sender === currentUserId ? "chat-end" : "chat-start"
-      }`}
+      className={classNames("chat", {
+        "chat-end": isCurrentUser,
+        "chat-start": !isCurrentUser,
+      })}
     >
-      <div className="chat-header">
-        {message.sender === currentUserId ? "You" : selectedUser.username}
-        <time className="text-xs opacity-50 ml-2">
+      <div
+        className={classNames("chat-bubble", {
+          "chat-bubble-primary text-white": !isCurrentUser,
+        })}
+      >
+        {message.message}
+      </div>
+      <div className="chat-footer">
+        <time className="text-xs ml-2 opacity-70">
           {format(new Date(message.createdAt), "p, MMM d")}
         </time>
       </div>
-      <div className="chat-bubble">{message.message}</div>
-      <div className="chat-footer opacity-50">
-        {message.status || "Delivered"}
-      </div>
     </div>
   );
-}
+};
+
+export default memo(ChatBubble);

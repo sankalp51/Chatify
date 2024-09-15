@@ -6,7 +6,7 @@ const messageSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    receiver: {  // Corrected spelling from 'reciever' to 'receiver'
+    receiver: {  
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true

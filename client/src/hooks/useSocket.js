@@ -1,5 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
+import { useDispatch } from "react-redux"; // Import useDispatch from react-redux
+import { addMessage } from "../redux/features/messageSlice"; // Import the addMessage action from your Redux slice
 import useAuth from "./useAuth";
 
 export default function useSocket() {
@@ -7,6 +9,7 @@ export default function useSocket() {
   const [typingInfo, setTypingInfo] = useState({ isTyping: false, senderId: null }); // To track typing status
   const { auth } = useAuth();
   const socketRef = useRef(null); // Use useRef to store the socket instance
+  const dispatch = useDispatch(); // Initialize useDispatch
 
   useEffect(() => {
     if (!auth?.user || !auth?.accessToken) return;
@@ -16,7 +19,7 @@ export default function useSocket() {
       query: { userId: auth.id },
     });
 
-    // Listen for events
+    // Listen for online users event
     socketRef.current.on("getOnlineUsers", (onlineUserIds) => {
       setOnlineUsers(onlineUserIds);
     });
@@ -26,13 +29,18 @@ export default function useSocket() {
       setTypingInfo({ isTyping, senderId });
     });
 
+    // Listen for new messages
+    socketRef.current.on("newMessage", (message) => {
+      dispatch(addMessage(message)); // Dispatch the new message to Redux
+    });
+
     // Clean up socket connection on unmount
     return () => {
       if (socketRef.current) {
         socketRef.current.disconnect();
       }
     };
-  }, [auth]);
+  }, [auth, dispatch]);
 
   // Emit typing event
   const emitTyping = (recipientId, isTyping) => {

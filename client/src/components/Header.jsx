@@ -32,7 +32,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="bg-base-100 shadow-md p-4 flex flex-col md:flex-row justify-between items-center z-10">
+    <header className="bg-base-100 shadow-md p-4 flex flex-col md:flex-row justify-between items-center z-10 fixed top-0 left-0 w-full">
       <Modal open={open}>
         <div className="modal-box">
           <h3 className="font-bold text-lg">Logout</h3>
@@ -57,7 +57,7 @@ export default function Header() {
         </div>
       </Modal>
       <Link to="/" className="text-2xl font-bold text-primary mb-2 md:mb-0">
-        Chat App
+        Chattify
       </Link>
       <div className="flex items-center space-x-2">
         <span className="mr-4">

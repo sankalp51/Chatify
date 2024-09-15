@@ -12,7 +12,7 @@ export default function ChatInput({
   selectedUser,
 }) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const { theme } = useTheme();
+  const theme = useTheme();
 
   const handleInputChange = (e) => {
     setMessageInput(e.target.value);
@@ -39,16 +39,20 @@ export default function ChatInput({
       >
         <MdOutlineEmojiEmotions size={24} />
       </button>
-      {showEmojiPicker && (
-        <div className="absolute bottom-14 left-0">
-          <EmojiPicker
-            onEmojiClick={handleEmojiClick}
-            emojiStyle="native"
-            theme={theme}
-            lazyLoadEmojis
-          />
-        </div>
-      )}
+
+      <div
+        className={`absolute bottom-14 left-0 transition-all duration-200 ease-in-out transform ${
+          showEmojiPicker ? "opacity-100 scale-100" : "opacity-0 scale-90 pointer-events-none"
+        }`}
+      >
+        <EmojiPicker
+          onEmojiClick={handleEmojiClick}
+          emojiStyle="native"
+          theme={theme}
+          lazyLoadEmojis
+        />
+      </div>
+
       <input
         type="text"
         placeholder="Type your message..."

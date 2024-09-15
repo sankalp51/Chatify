@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  messages: [],
-  status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
+  messages: [], // Changed back to an array
+  status: "idle", 
 };
 
 const messagesSlice = createSlice({
@@ -10,17 +10,21 @@ const messagesSlice = createSlice({
   initialState,
   reducers: {
     setMessages: (state, action) => {
-      state.messages = action.payload;
+      state.messages = action.payload; // Directly assign the array of messages
       state.status = "succeeded";
     },
     setStatus: (state, action) => {
       state.status = action.payload;
     },
     addMessage: (state, action) => {
-      state.messages.push(action.payload);
+      const message = action.payload;
+      const exists = state.messages.find((msg) => msg._id === message._id);
+      if (!exists) {
+        state.messages.push(message); // Push message to array if it doesn't already exist
+      }
     },
     clearMessages: (state) => {
-      state.messages = [];
+      state.messages = []; // Reset messages to an empty array
       state.status = "idle";
     },
   },
