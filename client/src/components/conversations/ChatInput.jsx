@@ -21,7 +21,7 @@ export default function ChatInput({
 
   const handleEmojiClick = (emojiObject) => {
     setMessageInput((prevInput) => prevInput + emojiObject.emoji);
-    setShowEmojiPicker(false);
+    // Removed the line to close the emoji picker
   };
 
   const handleKeyPress = (e) => {
@@ -30,10 +30,14 @@ export default function ChatInput({
     }
   };
 
+  const toggleEmojiPicker = () => {
+    setShowEmojiPicker((prev) => !prev);
+  };
+
   return (
     <div className="mt-4 flex items-center space-x-2 relative">
       <button
-        onClick={() => setShowEmojiPicker((prev) => !prev)}
+        onClick={toggleEmojiPicker}
         className="p-3 rounded-full bg-transparent hover:bg-primary hover:text-white flex items-center justify-center"
       >
         <MdOutlineEmojiEmotions size={24} />
