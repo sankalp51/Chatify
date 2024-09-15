@@ -2,6 +2,8 @@
 
 A real-time chat application built using the MERN stack (MongoDB, Express.js, React.js, Node.js). Users can sign in and chat with other registered users.
 
+![Chatify Screenshot](./image.png)
+
 ## Features
 
 - **User Authentication**: Secure sign-up and login functionality.
@@ -67,6 +69,7 @@ cd chatify
     DATABASE_URL=your-mongodb-connection-string
     JWT_SECRET=your-jwt-secret
     ```
+
 4. **Create a `.env` File:**
 
     Create a `.env` file in the client directory and add the following:
@@ -201,4 +204,4 @@ For any questions or suggestions, please contact [sankalpkalangutkar31@gmail.com
 
 ---
 
-**Note:** Replace placeholders like `your-mongodb-connection-string`, `your-jwt-secret`, and contact information with your actual details.
+**Note:** Replace placeholders like `your-mongodb-connection-string`, `your-jwt-secret`, `path/to/your/image.png`, and contact information with your actual details.
