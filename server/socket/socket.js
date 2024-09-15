@@ -4,7 +4,12 @@ const express = require("express");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_ENDPOINT,
+    methods: ["GET", "POST"],
+  },
+});
 
 const userSocketMap = {};
 
