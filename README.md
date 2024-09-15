@@ -2,7 +2,8 @@
 
 A real-time chat application built using the MERN stack (MongoDB, Express.js, React.js, Node.js). Users can sign in and chat with other registered users.
 
-![Chatify Screenshot](./image.png)
+![Chatify Screenshot](./lightmode.png)
+![Chatify Screenshot](./darkmode.png)
 
 ## Features
 
