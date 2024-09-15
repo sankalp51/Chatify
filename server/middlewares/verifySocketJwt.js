@@ -9,7 +9,7 @@ const verifySocketJwt = (socket, next) => {
         if (err) {
             return next(new Error('Authentication error'));
         }
-        socket.user = decoded.username;  // Attach the username to the socket object
+        socket.user = decoded.username; 
         next();
     });
 };

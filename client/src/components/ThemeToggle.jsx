@@ -14,7 +14,6 @@ export default function ThemeToggle() {
 
     return (
         <label className="grid cursor-pointer place-items-center">
-            {/* Hidden checkbox to control the theme */}
             <input
                 type="checkbox"
                 value="synthwave"
@@ -23,7 +22,6 @@ export default function ThemeToggle() {
                 checked={theme === "dark"}
             />
             
-            {/* Sun icon */}
             <svg
                 className="stroke-base-100 fill-base-100 col-start-1 row-start-1"
                 xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +38,6 @@ export default function ThemeToggle() {
                 <path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
             </svg>
             
-            {/* Moon icon */}
             <svg
                 className="stroke-base-100 fill-base-100 col-start-2 row-start-1"
                 xmlns="http://www.w3.org/2000/svg"

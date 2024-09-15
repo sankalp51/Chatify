@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
     participants: [{
-        type: mongoose.Schema.Types.ObjectId,  // Array of ObjectIds
+        type: mongoose.Schema.Types.ObjectId, 
         ref: "User"
     }],
     messages: [{

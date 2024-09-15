@@ -8,7 +8,6 @@ export default function useFetchMessages(userId) {
   const axios = useAxiosPrivate();
   const dispatch = useDispatch();
 
-  // Get the messages and status from Redux
   const messages = useSelector((state) => state.messages.messages);
   const status = useSelector((state) => state.messages.status);
 

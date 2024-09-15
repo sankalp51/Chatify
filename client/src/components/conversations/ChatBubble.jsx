@@ -3,7 +3,6 @@ import classNames from "classnames";
 import { memo } from "react";
 
 const ChatBubble = ({ message, senderId, currentUserId, selectedUser }) => {
-  // Determine if the message is from the current user
   const isCurrentUser = message.sender === currentUserId;
 
   return (

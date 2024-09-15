@@ -24,7 +24,6 @@ io.on("connection", (socket) => {
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
   }
 
-  // Listen for typing events and broadcast to the recipient
   socket.on("typing", ({ recipientId, isTyping }) => {
     const recieverSocketId = getRecieverSokcetId(recipientId);
     if (recieverSocketId) {

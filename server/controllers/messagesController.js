@@ -16,32 +16,26 @@ const sendMessage = async (req, res, next) => {
             return res.status(404).json({ error: "User not found" });
         }
 
-        // Find a conversation with these participants by their ObjectId
         let conversation = await Conversations.findOne({
             participants: { $all: [sender._id, recipient._id] }
         });
 
-        // If no conversation exists, create one
         if (!conversation) {
             conversation = await Conversations.create({
                 participants: [sender._id, recipient._id]
             });
         }
 
-        // Create a new message
         const newMessage = new Message({
             sender: sender._id,
             receiver: recipient._id,
             message
         });
 
-        // Add the message to the conversation
         conversation.messages.push(newMessage);
 
-        // Save the conversation and the new message
         await Promise.all([conversation.save(), newMessage.save()]);
 
-        // Emit the new message to both the sender and recipient
         const recipientSocketId = getRecieverSokcetId(recipient._id);
         const senderSocketId = getRecieverSokcetId(sender._id);
         
