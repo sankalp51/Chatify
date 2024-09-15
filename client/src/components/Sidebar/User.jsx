@@ -1,10 +1,10 @@
 export default function User({ user, isOnline, onClick, isSelected }) {
   return (
     <div
-      onClick={onClick} // Handle clicks
+      onClick={onClick} 
       className={`flex items-center p-2 hover:bg-primary hover:text-white rounded cursor-pointer ${
         isSelected ? "bg-primary text-white" : ""
-      }`} // Conditional styling for selected user
+      }`}
     >
       <div className={`avatar ${isOnline && "online"}`}>
         <div className="w-12 rounded-full">

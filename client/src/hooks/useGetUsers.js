@@ -10,7 +10,7 @@ export default function useGetUsers() {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      dispatch(setLoading(true)); // Set loading to true
+      dispatch(setLoading(true)); 
 
       try {
         const response = await axios.get("/api/users");

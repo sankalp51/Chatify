@@ -24,7 +24,6 @@ export default function ChatInput({
     setShowEmojiPicker(false);
   };
 
-  // Handle key press (Enter) to send a message
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       handleSendMessage();
