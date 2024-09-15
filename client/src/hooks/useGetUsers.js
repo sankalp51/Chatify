@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setUsers } from "../redux/features/usersSlice";
+import { setUsers, setLoading } from "../redux/features/usersSlice";
 import useAxiosPrivate from "./useAxiosPrivate";
 import { toast } from "sonner";
 
@@ -10,10 +10,16 @@ export default function useGetUsers() {
 
   useEffect(() => {
     const fetchUsers = async () => {
+      dispatch(setLoading(true)); // Set loading to true
+
       try {
         const response = await axios.get("/api/users");
-        dispatch(setUsers(response.data));
+
+        setTimeout(() => {
+          dispatch(setUsers(response.data));
+        }, 1000);
       } catch (error) {
+        dispatch(setLoading(false));
         toast.error("Error fetching users");
       }
     };

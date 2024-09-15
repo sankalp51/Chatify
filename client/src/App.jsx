@@ -4,7 +4,7 @@ import { Toaster } from "sonner";
 import useTheme from "./hooks/useTheme.js";
 
 export default function App() {
-  const { theme } = useTheme();
+  const theme = useTheme();
   return (
     <>
       <Toaster

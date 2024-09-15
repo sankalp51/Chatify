@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   users: [],
   selectedUser: null,
+  loading: false, 
 };
 
 const usersSlice = createSlice({
@@ -10,14 +11,18 @@ const usersSlice = createSlice({
   initialState,
   reducers: {
     setUsers: (state, action) => {
-      state.users = action.payload; // Update the global state with the fetched users
+      state.users = action.payload;
+      state.loading = false; 
     },
     selectUser: (state, action) => {
       state.selectedUser = action.payload;
     },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
   },
 });
 
-export const { setUsers, selectUser } = usersSlice.actions;
+export const { setUsers, selectUser, setLoading } = usersSlice.actions;
 
 export default usersSlice.reducer;

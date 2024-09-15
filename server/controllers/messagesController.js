@@ -9,7 +9,6 @@ const sendMessage = async (req, res, next) => {
         const { id: recipientId } = req.params;  
         const username = req.user;  
 
-
         const sender = await User.findOne({ username });
         const recipient = await User.findById(recipientId); 
 
@@ -19,7 +18,7 @@ const sendMessage = async (req, res, next) => {
 
         // Find a conversation with these participants by their ObjectId
         let conversation = await Conversations.findOne({
-            participants: { $all: [sender._id, recipient._id] }  // Use _id for both sender and recipient
+            participants: { $all: [sender._id, recipient._id] }
         });
 
         // If no conversation exists, create one
@@ -31,20 +30,26 @@ const sendMessage = async (req, res, next) => {
 
         // Create a new message
         const newMessage = new Message({
-            sender: sender._id,  // Use sender's _id
-            receiver: recipient._id,  // Use corrected 'receiver' field
+            sender: sender._id,
+            receiver: recipient._id,
             message
         });
 
         // Add the message to the conversation
-        if (newMessage) conversation.messages.push(newMessage);
+        conversation.messages.push(newMessage);
 
         // Save the conversation and the new message
         await Promise.all([conversation.save(), newMessage.save()]);
 
-        const recieverSocketId = getRecieverSokcetId(recipient._id);
-        if (recieverSocketId) {
-            io.to(recieverSocketId).emit("newMessage", newMessage);
+        // Emit the new message to both the sender and recipient
+        const recipientSocketId = getRecieverSokcetId(recipient._id);
+        const senderSocketId = getRecieverSokcetId(sender._id);
+        
+        if (recipientSocketId) {
+            io.to(recipientSocketId).emit("newMessage", newMessage);
+        }
+        if (senderSocketId) {
+            io.to(senderSocketId).emit("newMessage", newMessage);
         }
 
         res.status(201).json(newMessage);
@@ -52,6 +57,7 @@ const sendMessage = async (req, res, next) => {
         next(error);
     }
 };
+
 
 
 

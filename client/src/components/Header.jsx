@@ -32,7 +32,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="bg-base-100 shadow-md p-4 flex flex-col md:flex-row justify-between items-center z-10">
+    <header className="bg-base-100 shadow-md p-4 flex flex-col md:flex-row justify-between items-center z-10 fixed top-0 left-0 w-full">
       <Modal open={open}>
         <div className="modal-box">
           <h3 className="font-bold text-lg">Logout</h3>
@@ -74,3 +74,4 @@ export default function Header() {
     </header>
   );
 }
+
