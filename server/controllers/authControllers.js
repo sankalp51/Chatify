@@ -30,20 +30,18 @@ const logIn = async (req, res, next) => {
     );
 
     await User.findOneAndUpdate({ username }, { refreshToken }).lean().exec();
-    res.cookie("chatapptoken", refreshToken, {
+    res.cookie("chatifyToken", refreshToken, {
       httpOnly: true,
       sameSite: "None",
       secure: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
-    res
-      .status(200)
-      .json({
-        accessToken,
-        user: username,
-        id: existingUser._id,
-        profilePic: existingUser.profilePic,
-      });
+    res.status(200).json({
+      accessToken,
+      user: username,
+      id: existingUser._id,
+      profilePic: existingUser.profilePic,
+    });
   } catch (error) {
     next(error);
   }
@@ -61,7 +59,9 @@ const signUp = async (req, res, next) => {
       return res.status(400).json({ message: "Passwords do not match" });
     const duplicate = await User.findOne({ username }).lean().exec();
     if (duplicate)
-      return res.status(409).json({ message: "username already taken" });
+      return res
+        .status(400)
+        .json({ message: "Something went wrong, Please try again later" });
 
     const hashPwd = await bcrypt.hash(password, 10);
 
@@ -90,7 +90,7 @@ const logOut = async (req, res, next) => {
 
     const foundUser = await User.findOne({ refreshToken }).lean().exec();
     if (!foundUser) {
-      res.clearCookie("chatapptoken", {
+      res.clearCookie("chatifyToken", {
         httpOnly: true,
         sameSite: "None",
         secure: true,
@@ -98,7 +98,7 @@ const logOut = async (req, res, next) => {
       return res.sendStatus(204);
     }
     await User.findOneAndUpdate({ refreshToken }, "").lean().exec();
-    res.clearCookie("chatapptoken", {
+    res.clearCookie("chatifyToken", {
       httpOnly: true,
       sameSite: "None",
       secure: true,
