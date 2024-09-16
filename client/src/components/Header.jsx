@@ -1,17 +1,21 @@
+// Header.jsx
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import ThemeToggle from "./ThemeToggle";
 import useLogout from "../hooks/useLogout";
 import Modal from "./Modal";
 import { toast } from "sonner";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Button from "./Button";
+import { FiMenu } from "react-icons/fi";
+import SidebarContext from "../context/SideBarContext";
 
 export default function Header() {
   const [open, setIsOpen] = useState(false);
   const { auth } = useAuth();
   const logout = useLogout();
   const navigate = useNavigate();
+  const { toggleSidebar } = useContext(SidebarContext);
 
   const handleLogout = () => {
     logout();
@@ -32,7 +36,28 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="bg-base-100 shadow-md p-4 flex flex-col md:flex-row justify-between items-center z-10 fixed top-0 left-0 w-full">
+    <header className="bg-base-100 shadow-md p-4 flex items-center justify-between z-10 fixed top-0 left-0 w-full">
+      <div className="flex items-center">
+        <button onClick={toggleSidebar} className="sm:hidden p-2 mr-2">
+          <FiMenu size={24} />
+        </button>
+        <Link to="/" className="text-2xl font-bold text-primary">
+          Chatify
+        </Link>
+      </div>
+      <div className="flex items-center space-x-2">
+        <span className="mr-4">
+          <ThemeToggle />
+        </span>
+        {auth.accessToken && (
+          <Button
+            className="btn btn-outline btn-error hover:text-white"
+            onClick={() => setIsOpen(true)}
+            name="Logout"
+          />
+        )}
+      </div>
+
       <Modal open={open}>
         <div className="modal-box">
           <h3 className="font-bold text-lg">Logout</h3>
@@ -56,21 +81,6 @@ export default function Header() {
           </div>
         </div>
       </Modal>
-      <Link to="/" className="text-2xl font-bold text-primary mb-2 md:mb-0">
-        Chatify
-      </Link>
-      <div className="flex items-center space-x-2">
-        <span className="mr-4">
-          <ThemeToggle />
-        </span>
-        {auth.accessToken && (
-          <Button
-            className="btn btn-outline btn-error hover:text-white"
-            onClick={() => setIsOpen(true)}
-            name="Logout"
-          />
-        )}
-      </div>
     </header>
   );
 }
