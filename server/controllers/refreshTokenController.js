@@ -4,9 +4,9 @@ const User = require("../model/User");
 const handleRefreshToken = async (req, res, next) => {
     try {
         const cookie = req.cookies;
-        if (!cookie?.chatapptoken) return res.sendStatus(401);
+        if (!cookie?.chatifyToken) return res.sendStatus(401);
 
-        const refreshToken = cookie.chatapptoken;
+        const refreshToken = cookie.chatifyToken;
         const user = await User.findOne({ refreshToken }).lean().exec();
         if (!user) return res.sendStatus(403);
 
