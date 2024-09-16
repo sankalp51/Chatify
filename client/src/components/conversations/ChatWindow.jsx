@@ -18,7 +18,10 @@ const ChatWindow = () => {
   const { emitTyping, typingInfo, onlineUsers, emitSendMessage } = useSocket();
   const [messageInput, setMessageInput] = useState("");
   const dispatch = useDispatch();
+
   const chatEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
+  const [isAtBottom, setIsAtBottom] = useState(true);
 
   const emitTypingDebounced = useMemo(
     () =>
@@ -40,11 +43,16 @@ const ChatWindow = () => {
     });
   };
 
+  const handleScroll = () => {
+    const { scrollTop, scrollHeight, clientHeight } = messagesContainerRef.current;
+    setIsAtBottom(scrollTop + clientHeight >= scrollHeight - 10);
+  };
+
   useEffect(() => {
-    if (chatEndRef.current) {
+    if (isAtBottom && chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages]);
+  }, [messages, isAtBottom]);
 
   const memoizedMessages = useMemo(
     () =>
@@ -91,20 +99,26 @@ const ChatWindow = () => {
         </div>
       </div>
 
-      {status === "loading" ? (
-        <div className="flex-1 overflow-y-auto mb-4">
-          {[...Array(3)].map((_, index) => (
-            <ChatSkeleton key={index} />
-          ))}
-        </div>
-      ) : status === "failed" ? (
-        <NoMessages />
-      ) : (
-        <div className="flex-1 overflow-y-auto mb-4">
-          {memoizedMessages}
-          <div ref={chatEndRef}></div>
-        </div>
-      )}
+      <div
+        className="flex-1 overflow-y-auto mb-4 chat-messages"
+        onScroll={handleScroll}
+        ref={messagesContainerRef}
+      >
+        {status === "loading" ? (
+          <div>
+            {[...Array(3)].map((_, index) => (
+              <ChatSkeleton key={index} />
+            ))}
+          </div>
+        ) : status === "failed" ? (
+          <NoMessages />
+        ) : (
+          <div>
+            {memoizedMessages}
+            <div ref={chatEndRef}></div>
+          </div>
+        )}
+      </div>
 
       <ChatInput
         messageInput={messageInput}
