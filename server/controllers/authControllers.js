@@ -85,7 +85,7 @@ const signUp = async (req, res, next) => {
 const logOut = async (req, res, next) => {
   try {
     const cookie = req.cookies;
-    if (!cookie.chatapptoken) return res.sendStatus(204);
+    if (!cookie.chatifyToken) return res.sendStatus(204);
     const refreshToken = cookie.chatapptoken;
 
     const foundUser = await User.findOne({ refreshToken }).lean().exec();

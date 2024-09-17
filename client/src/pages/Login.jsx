@@ -26,11 +26,10 @@ export default function Login() {
   const passwordRef = useRef();
 
   useEffect(() => {
-    // If the user is already authenticated, redirect them
     if (auth?.accessToken) {
       navigate(from, { replace: true });
     }
-  }, [auth, navigate, from]);
+  }, [auth?.accessToken, navigate, from]);
 
   useEffect(() => {
     usernameRef.current.focus();
@@ -133,10 +132,7 @@ export default function Login() {
             }`}
           />
           {errors.username && (
-            <p
-              id="username-error"
-              className="text-error text-sm mt-1"
-            >
+            <p id="username-error" className="text-error text-sm mt-1">
               {errors.username}
             </p>
           )}
@@ -173,10 +169,7 @@ export default function Login() {
             </button>
           </div>
           {errors.password && (
-            <p
-              id="password-error"
-              className="text-error text-sm mt-1"
-            >
+            <p id="password-error" className="text-error text-sm mt-1">
               {errors.password}
             </p>
           )}

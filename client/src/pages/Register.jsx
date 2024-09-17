@@ -1,12 +1,12 @@
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import axios from "../api/axios";
 import { IoEye } from "react-icons/io5";
 import { IoMdEyeOff } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 
 export default function Register() {
   const REGISTER_URL = "/api/auth/register";
@@ -17,6 +17,8 @@ export default function Register() {
     confirmPassword: "",
     gender: "",
   });
+
+  const { auth, setAuth } = useAuth();
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -29,6 +31,14 @@ export default function Register() {
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
   const genderRef = useRef();
+
+  const from = location.state?.from?.pathname || "/";
+
+  useEffect(() => {
+    if (auth?.accessToken) {
+      navigate(from, { replace: true });
+    }
+  }, [auth?.accessToken, navigate, from]);
 
   useEffect(() => {
     fullNameRef.current.focus();
