@@ -8,6 +8,7 @@ import ChatInput from "./ChatInput";
 import ChatSkeleton from "./ChatSkeleton";
 import NoMessages from "./NoMessages";
 import { memo } from "react";
+import { toast } from "sonner";
 
 const ChatWindow = () => {
   const { auth } = useAuth();
@@ -23,14 +24,6 @@ const ChatWindow = () => {
   const messagesContainerRef = useRef(null);
   const [isAtBottom, setIsAtBottom] = useState(true);
 
-  const emitTypingDebounced = useMemo(
-    () =>
-      debounce((recipientId, isTyping) => {
-        emitTyping(recipientId, isTyping);
-      }, 300),
-    [emitTyping]
-  );
-
   const handleSendMessage = () => {
     if (messageInput.trim() === "") return;
     emitSendMessage(selectedUser._id, messageInput, (response) => {
@@ -38,7 +31,7 @@ const ChatWindow = () => {
         setMessageInput("");
         emitTypingDebounced(selectedUser._id, false);
       } else {
-        console.error("Failed to send message:", response.error);
+        toast.error("Failed to send message");
       }
     });
   };
@@ -124,7 +117,7 @@ const ChatWindow = () => {
         messageInput={messageInput}
         setMessageInput={setMessageInput}
         handleSendMessage={handleSendMessage}
-        emitTyping={emitTypingDebounced}
+        emitTyping={emitTyping}
         selectedUser={selectedUser}
       />
     </div>
