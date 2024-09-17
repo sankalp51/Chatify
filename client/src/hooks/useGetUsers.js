@@ -10,14 +10,11 @@ export default function useGetUsers() {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      dispatch(setLoading(true)); 
+      dispatch(setLoading(true));
 
       try {
         const response = await axios.get("/api/users");
-
-        setTimeout(() => {
-          dispatch(setUsers(response.data));
-        }, 1000);
+        dispatch(setUsers(response.data));
       } catch (error) {
         dispatch(setLoading(false));
         toast.error("Error fetching users");

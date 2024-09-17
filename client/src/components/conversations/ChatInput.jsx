@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { FiSend } from "react-icons/fi";
 import { MdOutlineEmojiEmotions } from "react-icons/md";
 import EmojiPicker from "emoji-picker-react";
@@ -13,20 +13,36 @@ export default function ChatInput({
 }) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const theme = useTheme();
+  const typingRef = useRef(null);
 
   const handleInputChange = (e) => {
     setMessageInput(e.target.value);
-    emitTyping(selectedUser._id, e.target.value.length > 0);
+    emitTyping(selectedUser._id, true);
+
+    if (typingRef.current) {
+      clearTimeout(typingRef.current);
+    }
+
+    typingRef.current = setTimeout(() => {
+      emitTyping(selectedUser._id, false);
+    }, 500);
   };
 
   const handleEmojiClick = (emojiObject) => {
     setMessageInput((prevInput) => prevInput + emojiObject.emoji);
-    // Removed the line to close the emoji picker
+  };
+
+  const handleSendMessageWrapper = () => {
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    emitTyping(selectedUser._id, false);
+    handleSendMessage();
   };
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      handleSendMessage();
+      handleSendMessageWrapper();
     }
   };
 
@@ -45,7 +61,9 @@ export default function ChatInput({
 
       <div
         className={`absolute bottom-14 left-0 transition-all duration-200 ease-in-out transform ${
-          showEmojiPicker ? "opacity-100 scale-100" : "opacity-0 scale-90 pointer-events-none"
+          showEmojiPicker
+            ? "opacity-100 scale-100"
+            : "opacity-0 scale-90 pointer-events-none"
         }`}
       >
         <EmojiPicker
