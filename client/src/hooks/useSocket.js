@@ -55,7 +55,7 @@ export default function useSocket() {
         { recipientId, message, username: auth.user }, 
         (response) => {
           if (response.status === 201) {
-            dispatch(addMessage(response.message)); // Add message to Redux store
+            dispatch(addMessage(response.message)); 
           } else {
             console.error("Failed to send message:", response.error);
           }
