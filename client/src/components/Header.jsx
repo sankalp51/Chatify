@@ -38,9 +38,11 @@ export default function Header() {
   return (
     <header className="bg-base-100 shadow-md p-4 flex items-center justify-between z-10 fixed top-0 left-0 w-full">
       <div className="flex items-center">
-        <button onClick={toggleSidebar} className="sm:hidden p-2 mr-2">
-          <FiMenu size={24} />
-        </button>
+        {auth?.accessToken && (
+          <button onClick={toggleSidebar} className="sm:hidden p-2 mr-2">
+            <FiMenu size={24} />
+          </button>
+        )}
         <Link to="/" className="text-2xl font-bold text-primary">
           Chatify
         </Link>

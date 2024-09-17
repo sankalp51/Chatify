@@ -4,7 +4,7 @@ export default function Loading() {
       <div className="text-center">
         <span className="loading loading-spinner loading-lg text-white"></span>
         <p className="mt-4 text-white text-lg">Loading...</p>
-        <p>This might take a while, Sorry about that😅</p>
+        <p className="text-white">This might take a while, Sorry about that😅</p>
       </div>
     </div>
   );
