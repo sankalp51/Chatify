@@ -1,17 +1,26 @@
-// Home.jsx
 import { useSelector } from "react-redux";
 import Sidebar from "../components/Sidebar/Sidebar";
 import ChatPlaceholder from "../components/ChatPlaceholder";
 import ChatWindow from "../components/conversations/ChatWindow";
 import useFetchMessages from "../hooks/useFetchMessages";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import SidebarContext from "../context/SideBarContext";
+import useAuth from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+  const { auth } = useAuth();
+  const navigate = useNavigate();
   const selectedUser = useSelector((state) => state.users.selectedUser);
   useFetchMessages(selectedUser ? selectedUser._id : null);
 
   const { isSidebarOpen, toggleSidebar } = useContext(SidebarContext);
+
+  useEffect(() => {
+    if (!auth) {
+      navigate("/login", { replace: true });
+    }
+  }, [auth]);
 
   return (
     <main className="flex flex-col sm:flex-row h-screen bg-base-200 pt-[4rem] relative">
