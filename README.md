@@ -201,7 +201,7 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 
 ## Contact
 
-For any questions or suggestions, please contact [sankalpkalangutkar31@gmail.com](mailto:sankalpkalangutkar31@gmail.com).
+For any questions or suggestions, please contact [sankalp.kalangutkar31@gmail.com](mailto:sankalp.kalangutkar31@gmail.com).
 
 ---
 
