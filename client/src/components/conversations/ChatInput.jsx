@@ -33,9 +33,6 @@ export default function ChatInput({
   };
 
   const handleSendMessageWrapper = () => {
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-    }
     emitTyping(selectedUser._id, false);
     handleSendMessage();
   };

@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import useAuth from "../../hooks/useAuth";
 import useSocket from "../../hooks/useSocket";
-import debounce from "lodash.debounce";
 import ChatBubble from "./ChatBubble";
 import ChatInput from "./ChatInput";
 import ChatSkeleton from "./ChatSkeleton";
@@ -18,7 +17,6 @@ const ChatWindow = () => {
   const status = useSelector((state) => state.messages.status);
   const { emitTyping, typingInfo, onlineUsers, emitSendMessage } = useSocket();
   const [messageInput, setMessageInput] = useState("");
-  const dispatch = useDispatch();
 
   const chatEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
@@ -37,7 +35,8 @@ const ChatWindow = () => {
   };
 
   const handleScroll = () => {
-    const { scrollTop, scrollHeight, clientHeight } = messagesContainerRef.current;
+    const { scrollTop, scrollHeight, clientHeight } =
+      messagesContainerRef.current;
     setIsAtBottom(scrollTop + clientHeight >= scrollHeight - 10);
   };
 

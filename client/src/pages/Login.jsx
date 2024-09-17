@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { toast } from "sonner";
@@ -22,12 +22,19 @@ export default function Login() {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const usernameRef = useRef();
+  const passwordRef = useRef();
+
   useEffect(() => {
     // If the user is already authenticated, redirect them
     if (auth?.accessToken) {
       navigate(from, { replace: true });
     }
   }, [auth, navigate, from]);
+
+  useEffect(() => {
+    usernameRef.current.focus();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -85,6 +92,12 @@ export default function Login() {
       setIsSubmitting(false);
     } else {
       setErrors(newErrors);
+      // Set focus to the first input with an error
+      if (newErrors.username) {
+        usernameRef.current.focus();
+      } else if (newErrors.password) {
+        passwordRef.current.focus();
+      }
     }
   };
 
@@ -93,45 +106,81 @@ export default function Login() {
       <form
         className="w-full max-w-md p-8 bg-base-100 rounded-lg shadow-lg"
         onSubmit={handleSubmit}
+        noValidate
       >
         <h2 className="text-2xl font-bold mb-6 text-center text-primary">
           Login
         </h2>
-        <Input
-          value={credentials.username}
-          onChange={handleChange}
-          type="text"
-          name="username"
-          placeholder="Username"
-          className={`input input-bordered w-full mb-2 ${
-            errors.username ? "input-error" : ""
-          }`}
-        />
-        {errors.username && (
-          <p className="text-error text-sm mb-2">{errors.username}</p>
-        )}
-        <div className="relative">
+        <div className="mb-4">
+          <label
+            htmlFor="username"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Username
+          </label>
           <Input
-            value={credentials.password}
+            id="username"
+            ref={usernameRef}
+            value={credentials.username}
             onChange={handleChange}
-            type={showPassword ? "text" : "password"}
-            name="password"
-            placeholder="Password"
-            className={`input input-bordered w-full mb-2 ${
-              errors.password ? "input-error" : ""
+            type="text"
+            name="username"
+            placeholder="Enter your username"
+            aria-describedby={errors.username ? "username-error" : null}
+            aria-invalid={!!errors.username}
+            className={`input input-bordered w-full ${
+              errors.username ? "input-error" : ""
             }`}
           />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-3 text-xl"
-          >
-            {showPassword ? <IoEye /> : <IoMdEyeOff />}
-          </button>
+          {errors.username && (
+            <p
+              id="username-error"
+              className="text-error text-sm mt-1"
+            >
+              {errors.username}
+            </p>
+          )}
         </div>
-        {errors.password && (
-          <p className="text-error text-sm mb-2">{errors.password}</p>
-        )}
+        <div className="mb-4">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Password
+          </label>
+          <div className="relative">
+            <Input
+              id="password"
+              ref={passwordRef}
+              value={credentials.password}
+              onChange={handleChange}
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Enter your password"
+              aria-describedby={errors.password ? "password-error" : null}
+              aria-invalid={!!errors.password}
+              className={`input input-bordered w-full ${
+                errors.password ? "input-error" : ""
+              }`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-3 text-xl"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <IoEye /> : <IoMdEyeOff />}
+            </button>
+          </div>
+          {errors.password && (
+            <p
+              id="password-error"
+              className="text-error text-sm mt-1"
+            >
+              {errors.password}
+            </p>
+          )}
+        </div>
         <Button
           name={isSubmitting ? "Logging in..." : "Login"}
           type="submit"
