@@ -15,6 +15,10 @@ export default function ChatInput({
   const theme = useTheme();
   const typingRef = useRef(null);
 
+  const toggleEmojiPicker = () => {
+    setShowEmojiPicker((prev) => !prev);
+  };
+
   const handleInputChange = (e) => {
     setMessageInput(e.target.value);
     emitTyping(selectedUser._id, true);
@@ -34,6 +38,7 @@ export default function ChatInput({
 
   const handleSendMessageWrapper = () => {
     emitTyping(selectedUser._id, false);
+    setShowEmojiPicker(false);
     handleSendMessage();
   };
 
@@ -43,8 +48,9 @@ export default function ChatInput({
     }
   };
 
-  const toggleEmojiPicker = () => {
-    setShowEmojiPicker((prev) => !prev);
+  const sendMessage = () => {
+    setShowEmojiPicker(false);
+    handleSendMessage();
   };
 
   return (
@@ -80,7 +86,7 @@ export default function ChatInput({
         className="w-full p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
       />
       <button
-        onClick={handleSendMessage}
+        onClick={sendMessage}
         className="p-3 rounded-full bg-primary text-white hover:bg-primary-focus flex items-center justify-center"
       >
         <FiSend size={20} />
