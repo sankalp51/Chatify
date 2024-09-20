@@ -91,7 +91,7 @@ cd chatify
 1. **Navigate to the client directory:**
 
     ```bash
-    cd ../client
+    cd ./client
     ```
 
 2. **Install Dependencies:**
@@ -115,6 +115,13 @@ cd chatify
 ## Scripts
 
 ### Server Scripts
+
+- **Navigate to the server directory:**
+
+    ```bash
+    cd ./server
+    ```
+
 
 - **Start Server in Development Mode:**
 
