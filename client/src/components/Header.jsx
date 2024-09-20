@@ -19,8 +19,8 @@ export default function Header() {
   const handleLogout = () => {
     logout();
     setIsOpen(false);
-    toast.success("Successfully logged out");
     navigate("/login");
+    toast.success("Successfully logged out");
   };
 
   useEffect(() => {
