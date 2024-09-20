@@ -68,7 +68,8 @@ cd chatify
 
     ```env
     DATABASE_URL=your-mongodb-connection-string
-    JWT_SECRET=your-jwt-secret
+    ACCESS_TOKEN_SECRET=your-access-token-secret
+    REFRESH_TOKEN_SECRET=your-refresh-token-secret
     ```
 
 4. **Create a `.env` File:**
