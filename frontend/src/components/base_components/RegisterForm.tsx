@@ -133,7 +133,8 @@ export default function RegisterForm() {
           </p>
         )}
       </div>
-
+      <Label>Add profile picture</Label>
+      <Input type="file" name="profile-image" id="profile-pic" />
       <Button
         type="submit"
         className="w-full mt-4 bg-blue-500 text-white hover:bg-blue-600"

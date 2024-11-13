@@ -5,6 +5,8 @@ const connectDb = require("./config/db");
 const mongoose = require("mongoose");
 const credentials = require("./middlewares/credentials");
 const path = require("path");
+const errorHandler = require("./middlewares/errorHandler");
+const authRoutes = require("./routes/authRoutes/authRoutes");
 require("dotenv").config();
 
 const app = express();
@@ -16,9 +18,30 @@ app.use(cors(corsConfig));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.get("/", (req, res) => {
-  res.send("hello world");
+  if (req.accepts("html")) {
+    return res
+      .status(200)
+      .sendFile(path.join(__dirname, "views", "index.html"));
+  } else if (req.accepts("json")) {
+    return res.status(200).json({ message: "Welcome to the chatify API" });
+  }
+  res.type("text").status(200).send("Welcome to the chatify API");
 });
+
+app.use("/api/auth", authRoutes);
+
+app.all("*", (req, res) => {
+  if (req.accepts("html")) {
+    return res.status(404).sendFile(path.join(__dirname, "views", "404.html"));
+  } else if (req.accepts("json")) {
+    return res.status(404).json({ message: "404 Not found" });
+  }
+  res.type("text").status(404).send("404 Not found");
+});
+
+app.use(errorHandler);
 
 mongoose.connection.once("open", () => {
   app.listen(PORT, () => {
