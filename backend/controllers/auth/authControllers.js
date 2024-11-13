@@ -78,4 +78,36 @@ const register = async (req, res, next) => {
   }
 };
 
-module.exports = { login, register };
+const logout = async (req, res, next) => {
+  try {
+    const cookies = req.cookies;
+    if (!cookies?.chatifyToken) {
+      return res.sendStatus(201);
+    }
+
+    const refreshToken = cookies?.chatifyToken;
+    const user = await User.findOne({ refreshToken }).lean().exec();
+    if (!user) {
+      res.clearCookie("chatifyToken", {
+        httpOnly: true,
+        sameSite: "None",
+        secure: true,
+      });
+      return res.sendStatus(201);
+    }
+
+    await User.findOneAndUpdate({ refreshToken }, { refreshToken: "" })
+      .lean()
+      .exec();
+    res.clearCookie("chatifyToken", {
+      httpOnly: true,
+      sameSite: "None",
+      secure: true,
+    });
+    res.sendStatus(201);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { login, register, logout };

@@ -7,6 +7,7 @@ const credentials = require("./middlewares/credentials");
 const path = require("path");
 const errorHandler = require("./middlewares/errorHandler");
 const authRoutes = require("./routes/authRoutes/authRoutes");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const app = express();
@@ -15,6 +16,7 @@ const PORT = process.env.PORT || 3000;
 connectDb(process.env.DATABASE_URL);
 app.use(credentials);
 app.use(cors(corsConfig));
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
