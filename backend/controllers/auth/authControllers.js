@@ -1,6 +1,7 @@
 const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { handleFileUpload } = require("../../config/cloudinaryConfig");
 
 const login = async (req, res, next) => {
   try {
@@ -54,25 +55,42 @@ const register = async (req, res, next) => {
       return res.status(400).json({ message: "Invalid data" });
     }
 
+    let dataURI;
+    if (req.file) {
+      const b64 = Buffer.from(req.file.buffer).toString("base64");
+      dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+    }
     const emailRegex = /^[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/;
-    if (!emailRegex.test(email) || password.length === 8) {
+    if (!emailRegex.test(email) || password.length !== 8) {
       return res.status(400).json({ message: "invalid data" });
     }
 
+    if (password.trim() !== confirmPassword.trim()) {
+      return res.status(400).json({ message: "passwords don't match" });
+    }
     const userExists = await User.findOne({ email }).lean().exec();
     if (userExists) {
       return res.status(409).json({ message: "User already exists" });
     }
 
     const hashPwd = await bcrypt.hash(password, 10);
+    let cloudRes;
+    if (req.file && dataURI) {
+      cloudRes = await handleFileUpload(dataURI, "chatify/profile-pics");
+    }
     const newUser = new User({
       email,
       firstName: fname,
       lastName: lname,
       password: hashPwd,
+      profilePic: {
+        url: dataURI && cloudRes.secure_url,
+        id: dataURI && cloudRes.public_id,
+      },
     });
 
     await newUser.save();
+    res.status(201).json({ message: "Successfully registered" });
   } catch (error) {
     next(error);
   }

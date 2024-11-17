@@ -19,17 +19,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    friends: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
     refreshToken: String,
     profilePic: {
-      type: String,
-      default:
-        "icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
+      url: {
+        type: String,
+        default:
+          "icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
+      },
+      id: String,
     },
   },
   {

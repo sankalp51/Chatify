@@ -7,7 +7,10 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Eye, EyeOff } from "lucide-react";
-import { motion } from "framer-motion";
+import { api } from "../../utils/axios";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email" }),
@@ -24,8 +27,25 @@ export default function LoginForm() {
     formState: { errors },
   } = useForm<Inputs>({ resolver: zodResolver(loginSchema) });
 
+  const { mutate } = useMutation({
+    mutationFn: async function (data: Inputs) {
+      const response = await api.post<{ user: User; accessToken: string }>(
+        "/api/auth/login",
+        data
+      );
+      return response;
+    },
+    onSuccess: function ({ data }) {
+      toast.success("successfully logged in");
+    },
+    onError: function (error: AxiosError<{ message: string }>) {
+      let message = error?.response?.data?.message || "Something went wrong";
+      toast.error(message);
+    },
+  });
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+    mutate(data);
   };
 
   return (
@@ -41,7 +61,9 @@ export default function LoginForm() {
         placeholder="Enter your email"
         type="email"
       />
-      {errors.email && <p className="text-red-600 text-sm">{errors.email.message}</p>}
+      {errors.email && (
+        <p className="text-red-600 text-sm">{errors.email.message}</p>
+      )}
 
       <Label htmlFor="password">Password</Label>
       <div className="relative">

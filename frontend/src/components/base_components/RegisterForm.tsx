@@ -134,7 +134,7 @@ export default function RegisterForm() {
         )}
       </div>
       <Label>Add profile picture</Label>
-      <Input type="file" name="profile-image" id="profile-pic" />
+      <Input type="file" name="profile-image" id="profile-pic" accept="image/*"/>
       <Button
         type="submit"
         className="w-full mt-4 bg-blue-500 text-white hover:bg-blue-600"
