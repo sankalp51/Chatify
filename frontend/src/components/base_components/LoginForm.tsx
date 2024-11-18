@@ -11,6 +11,9 @@ import { api } from "../../utils/axios";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
+import { useAppDispatch } from "@/redux/store";
+import { setLogIn } from "@/redux/features/authSlics";
+import { useNavigate } from "react-router-dom";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email" }),
@@ -20,6 +23,7 @@ const loginSchema = z.object({
 type Inputs = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
+  const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
@@ -27,16 +31,19 @@ export default function LoginForm() {
     formState: { errors },
   } = useForm<Inputs>({ resolver: zodResolver(loginSchema) });
 
+  const navigate = useNavigate();
+
   const { mutate } = useMutation({
     mutationFn: async function (data: Inputs) {
-      const response = await api.post<{ user: User; accessToken: string }>(
-        "/api/auth/login",
-        data
-      );
+      const response = await api.post<AuthPayload>("/api/auth/login", data, {
+        withCredentials: true,
+      });
       return response;
     },
     onSuccess: function ({ data }) {
       toast.success("successfully logged in");
+      dispatch(setLogIn(data));
+      navigate("/");
     },
     onError: function (error: AxiosError<{ message: string }>) {
       let message = error?.response?.data?.message || "Something went wrong";
@@ -57,7 +64,7 @@ export default function LoginForm() {
       <Input
         {...register("email")}
         id="email"
-        className={errors.email && "border-red-500"}
+        className={`dark:ring-1 ${errors.email && "border-red-500 ring-0"}`}
         placeholder="Enter your email"
         type="email"
       />
@@ -70,7 +77,9 @@ export default function LoginForm() {
         <Input
           {...register("password")}
           id="password"
-          className={errors.password && "border-red-500"}
+          className={`dark:ring-1 ${
+            errors.password && "border-red-500 ring-0"
+          }`}
           placeholder="Enter your password"
           type={showPassword ? "text" : "password"}
         />

@@ -8,7 +8,7 @@ const refreshTokenController = require("../../controllers/auth/refreshTokenContr
 const upload = require("../../config/multerConfig");
 
 router.post("/login", login);
-router.post("/register", upload.single("profile-pic"), register);
+router.post("/register", upload.single("profilePic"), register);
 router.get("/logout", logout);
 router.get("/refresh", refreshTokenController);
 

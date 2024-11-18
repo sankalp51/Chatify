@@ -35,6 +35,8 @@ const login = async (req, res, next) => {
       { expiresIn: "15d" }
     );
 
+    await User.findOneAndUpdate({ email }, { refreshToken }).lean().exec();
+
     res.cookie("chatifyToken", refreshToken, {
       httpOnly: true,
       sameSite: "None",
@@ -50,8 +52,8 @@ const login = async (req, res, next) => {
 
 const register = async (req, res, next) => {
   try {
-    const { fname, lname, email, password, confirmPassword } = req.body;
-    if (!fname || !lname || !email || !password || !confirmPassword) {
+    const { firstName, lastName, email, password, confirmPassword } = req.body;
+    if (!firstName || !lastName || !email || !password || !confirmPassword) {
       return res.status(400).json({ message: "Invalid data" });
     }
 
@@ -80,8 +82,8 @@ const register = async (req, res, next) => {
     }
     const newUser = new User({
       email,
-      firstName: fname,
-      lastName: lname,
+      firstName,
+      lastName,
       password: hashPwd,
       profilePic: {
         url: dataURI && cloudRes.secure_url,
