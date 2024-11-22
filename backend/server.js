@@ -7,7 +7,10 @@ const credentials = require("./middlewares/credentials");
 const path = require("path");
 const errorHandler = require("./middlewares/errorHandler");
 const authRoutes = require("./routes/authRoutes/authRoutes");
+const verifyJwt = require("./middlewares/verifyJwt");
+const userRoutes = require("./routes/userRoutes");
 const cookieParser = require("cookie-parser");
+const chatRoutes = require("./routes/chatRoutes");
 require("dotenv").config();
 
 const app = express();
@@ -33,6 +36,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/users", verifyJwt, userRoutes);
+app.use("/api/chats", verifyJwt, chatRoutes);
 
 app.all("*", (req, res) => {
   if (req.accepts("html")) {

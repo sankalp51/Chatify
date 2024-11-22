@@ -16,3 +16,5 @@ const allUsers = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports = { allUsers };

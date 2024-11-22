@@ -16,7 +16,7 @@ export default function Header() {
             title="Logout"
             description="Are you sure you want to logout?"
             triggerClasses="bg-destructive px-4 py-2 rounded-sm text-white"
-            actionClasses="bg-destructive hover:bg-red-600 dark:text-white"
+            actionClasses="bg-destructive hover:bg-red-600 dark:text-white border-none"
             actionFunction={async () => await logout()}
           />
         )}
