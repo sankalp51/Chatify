@@ -4,31 +4,42 @@ import Auth from "@/pages/Auth";
 import AuthLayout from "@/layouts/AuthLayout";
 import Home from "@/pages/Home";
 import PersistLogin from "@/layouts/PersistLogin";
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <MainLayout />,
+      children: [
+        {
+          path: "/auth",
+          element: <Auth />,
+        },
+        {
+          element: <PersistLogin />,
+          children: [
+            {
+              element: <AuthLayout />,
+              children: [
+                {
+                  index: true,
+                  element: <Home />,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ],
   {
-    path: "/",
-    element: <MainLayout />,
-    children: [
-      {
-        path: "/auth",
-        element: <Auth />,
-      },
-      {
-        element: <PersistLogin />,
-        children: [
-          {
-            element: <AuthLayout />,
-            children: [
-              {
-                index: true,
-                element: <Home />,
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-]);
+    future: {
+      v7_relativeSplatPath: true,
+      v7_fetcherPersist: true,
+      v7_normalizeFormMethod: true,
+      v7_partialHydration: true,
+      v7_skipActionErrorRevalidation: true,
+    },
+  }
+);
 
 export default router;

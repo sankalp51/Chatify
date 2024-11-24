@@ -11,9 +11,13 @@ const verifyJwt = require("./middlewares/verifyJwt");
 const userRoutes = require("./routes/userRoutes");
 const cookieParser = require("cookie-parser");
 const chatRoutes = require("./routes/chatRoutes");
+const { Server } = require("socket.io");
+const { createServer } = require("http");
 require("dotenv").config();
 
 const app = express();
+const server = createServer(app);
+const io = new Server(server);
 const PORT = process.env.PORT || 3000;
 
 connectDb(process.env.DATABASE_URL);
@@ -51,7 +55,7 @@ app.all("*", (req, res) => {
 app.use(errorHandler);
 
 mongoose.connection.once("open", () => {
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     console.log("server started on port 3000");
   });
 });

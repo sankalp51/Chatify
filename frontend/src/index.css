@@ -4,62 +4,56 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 205 70% 60%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
+    /* Light Theme */
+    --background: 0 0% 98%;           /* Soft white */
+    --foreground: 220 15% 20%;       /* Deep gray for text */
+    --card: 0 0% 100%;               /* Pure white cards */
+    --card-foreground: 220 20% 15%;  /* Dark gray for card text */
+    --popover: 0 0% 100%;            /* Matches card */
+    --popover-foreground: 220 20% 15%; /* Matches card text */
+    --primary: 220 90% 56%;          /* Bright blue */
+    --primary-foreground: 0 0% 100%; /* White text on blue */
+    --secondary: 220 10% 95%;        /* Very light gray */
+    --secondary-foreground: 220 15% 40%; /* Gray for secondary text */
+    --muted: 220 10% 92%;            /* Light muted background */
+    --muted-foreground: 220 15% 50%; /* Subtle gray */
+    --accent: 210 80% 45%;           /* Modern bluish accent */
+    --accent-foreground: 0 0% 100%;  /* White text on bluish accent */
+    --destructive: 0 75% 60%;        /* Vibrant red */
+    --destructive-foreground: 0 0% 100%; /* White text on red */
+    --border: 220 10% 85%;           /* Light gray border */
+    --input: 0 0% 97%;               /* Subtle input background */
+    --ring: 220 90% 75%;             /* Blue focus ring */
+    --radius: 0.5rem;                /* Slightly rounded corners */
   }
 
   .dark {
-    --background: 230 15% 10%;          /* Darker background with a hint of cool tone */
-    --foreground: 210 20% 92%;          /* Softer white for text on dark background */
-    --card: 225 15% 12%;                /* Card background to provide slight contrast */
-    --card-foreground: 210 20% 92%;     /* Text on cards */
-    --popover: 225 15% 12%;             /* Popover same as card background */
-    --popover-foreground: 210 20% 92%;  /* Text on popovers */
-    --primary: 220 35% 65%;             /* Softer blue for primary elements */
-    --primary-foreground: 210 20% 10%;  /* Darker text for primary elements */
-    --secondary: 210 10% 20%;           /* Darker secondary background */
-    --secondary-foreground: 210 15% 85%; /* Light text for secondary components */
-    --muted: 210 10% 20%;               /* Muted background, same as secondary */
-    --muted-foreground: 210 20% 50%;    /* Mid-tone gray text */
-    --accent: 205 70% 60%;              /* Blue accent for emphasis */
-    --accent-foreground: 0 0% 98%;      /* White text for accents */
-    --destructive: 0 60% 50%;           /* Soft red for destructive elements */
-    --destructive-foreground: 0 0% 98%; /* White for destructive text */
-    --border: 210 20% 25%;              /* Softer border */
-    --input: 210 15% 20%;               /* Input background */
-    --ring: 210 25% 30%;                /* Subtle ring color for focus */
-    --chart-1: 220 70% 60%;             /* Updated chart colors for consistency */
-    --chart-2: 160 60% 55%;
-    --chart-3: 45 85% 55%;
-    --chart-4: 280 70% 50%;
-    --chart-5: 340 70% 60%;
+    /* Dark Theme */
+    --background: 220 15% 10%;       /* Dark gray */
+    --foreground: 0 0% 98%;          /* Near white */
+    --card: 220 15% 15%;             /* Slightly lighter dark gray */
+    --card-foreground: 0 0% 98%;     /* Near white text on cards */
+    --popover: 220 15% 15%;          /* Matches card */
+    --popover-foreground: 0 0% 98%;  /* Matches card text */
+    --primary: 220 90% 66%;          /* Bright blue */
+    --primary-foreground: 0 0% 100%; /* White text on blue */
+    --secondary: 220 10% 20%;        /* Medium dark gray */
+    --secondary-foreground: 0 0% 90%; /* Lighter gray for secondary text */
+    --muted: 220 10% 15%;            /* Very dark muted background */
+    --muted-foreground: 0 0% 70%;    /* Subtle gray */
+    --accent: 210 80% 55%;           /* Modern bluish accent */
+    --accent-foreground: 0 0% 100%;  /* White text on bluish accent */
+    --destructive: 0 70% 50%;        /* Bright red */
+    --destructive-foreground: 0 0% 100%; /* White text on red */
+    --border: 220 10% 30%;           /* Subtle dark border */
+    --input: 220 10% 15%;            /* Darker input background */
+    --ring: 220 90% 50%;             /* Subtle blue ring */
+    --radius: 0.5rem;                /* Slightly rounded corners */
   }
 }
 
 @layer base {
+  /* Universal Styles */
   * {
     @apply border-border;
   }

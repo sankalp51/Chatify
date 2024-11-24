@@ -1,7 +1,9 @@
+import ContactsList from "@/components/base_components/ContactsList";
+
 export default function Home() {
+  
   return (
-    <section>
-      <h1>Hello world</h1>
+    <section className="w-full">
     </section>
-  )
+  );
 }

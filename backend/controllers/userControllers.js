@@ -10,7 +10,12 @@ const allUsers = async (req, res, next) => {
           ],
         }
       : {};
-    const users = await User.find(keyword).find({ _id: { $ne: req.user } });
+    const users = await User.find(keyword)
+      .find({ _id: { $ne: req.user } })
+      .select("-refreshToken -password");
+    if (!users?.length) {
+      return res.status(404).json({ message: "no users found" });
+    }
     res.status(200).json(users);
   } catch (error) {
     next(error);
