@@ -14,11 +14,11 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setLogIn: function (state, action: PayloadAction<AuthPayload>) {
+    setLogIn(state, action: PayloadAction<AuthPayload>) {
       (state.accessToken = action.payload.accessToken),
         (state.user = action.payload.user);
     },
-    setLogout: function (state) {
+    setLogout(state) {
       (state.accessToken = null), (state.user = null);
     },
   },

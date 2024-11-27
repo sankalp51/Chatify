@@ -13,7 +13,7 @@ export default function Header() {
   const auth = useAppSelector((state) => state.auth);
 
   return (
-    <header className="w-full flex justify-between items-center">
+    <header className="w-full flex justify-between items-center p-8 bg-muted">
       {auth.accessToken && <ContactsList />}
       <h1 className="text-3xl font-bold md:text-2xl">Chatify</h1>
       <div className="flex justify-center items-center flex-wrap gap-4">

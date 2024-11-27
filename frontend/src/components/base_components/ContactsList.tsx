@@ -19,6 +19,7 @@ import UserListItem from "./UserListItem";
 
 export default function ContactsList() {
   const [searchItem, setSearchItem] = useState("");
+  const [sheetOpen, setSheetOpen] = useState(false);
   const axios = useAxiosPrivate();
 
   const { isError, isLoading, error, data, refetch } = useQuery({
@@ -28,7 +29,6 @@ export default function ContactsList() {
         const response = await axios.get<User[]>(
           `/api/users/all-users?search=${searchItem}`
         );
-        console.log(response.data);
         return response.data;
       } catch (error) {
         if (error instanceof AxiosError) {
@@ -39,9 +39,14 @@ export default function ContactsList() {
     enabled: false,
   });
 
+  const handleSheetClose = (open: boolean) => {
+    setSearchItem("");
+    setSheetOpen(open);
+  };
+
   return (
     <div className="flex justify-left items-center gap-1">
-      <Sheet onOpenChange={() => setSearchItem("")}>
+      <Sheet open={sheetOpen} onOpenChange={(open) => handleSheetClose(open)}>
         <SheetTrigger>
           <ToolTip
             mainMessage={<Search className="cursor-pointer" />}
@@ -93,7 +98,11 @@ export default function ContactsList() {
             {data && data.length > 0 && (
               <div className="space-y-2">
                 {data.map((user) => (
-                  <UserListItem key={user._id} user={user} />
+                  <UserListItem
+                    onSheetOpen={setSheetOpen}
+                    key={user._id}
+                    user={user}
+                  />
                 ))}
               </div>
             )}
