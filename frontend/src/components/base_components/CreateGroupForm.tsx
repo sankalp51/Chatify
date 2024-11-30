@@ -20,6 +20,7 @@ export default function CreateGroupForm({ onModalOpen }: Props) {
   const axios = useAxiosPrivate();
   const dispatch = useAppDispatch();
   const [chatName, setChatName] = useState("");
+  const [nameError, setNameError] = useState("");
   const [searchItem, setSearchItem] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const [debouncSearch, setDebounceSearch] = useState("");
@@ -101,6 +102,10 @@ export default function CreateGroupForm({ onModalOpen }: Props) {
   };
 
   const handleCreateGroup = () => {
+    if (!chatName.length) {
+      setNameError("Please provide a name for the group");
+      return;
+    }
     if (selectedUsers.length < 2) {
       toast.error("Please select more than 2 group members");
       return;
@@ -113,8 +118,13 @@ export default function CreateGroupForm({ onModalOpen }: Props) {
         type="text"
         placeholder="Chat Name"
         value={chatName}
-        onChange={(e) => setChatName(e.target.value)}
+        onChange={(e) => {
+          setChatName(e.target.value);
+          setNameError("");
+        }}
+        style={{ border: nameError.length && "1px solid red" }}
       />
+      {nameError && <p className="text-red-500 text-center">{nameError}</p>}
       <Input
         type="text"
         placeholder="Search and select users"

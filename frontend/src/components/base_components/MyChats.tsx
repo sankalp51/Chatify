@@ -40,7 +40,7 @@ export default function MyChats() {
     <div
       className={`${
         selectedChat ? "hidden" : "flex"
-      } md:flex flex-col mt-2 items-center h-[calc(100vh-120px)] rounded-md p-3 bg-muted w-full md:w-[31%]`}
+      } md:flex flex-col mt-2 items-center h-[calc(100vh-90px)] rounded-md p-3 bg-muted w-full md:w-[31%]`}
     >
       <div className="pb-3 px-3 text-[28px] md:text-[30px] flex flex-wrap gap-2 w-full justify-between items-center">
         <h2 className="text-3xl">My Chats</h2>

@@ -6,6 +6,7 @@ import { setActiveChat } from "@/redux/features/activeChatSlice";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
 import Spinner from "./Spinner";
+import { queryClient } from "@/main";
 
 type Props = {
   user: User;
@@ -32,6 +33,7 @@ export default function UserListItem({ user, onSheetOpen }: Props) {
     },
     onSuccess: function (data) {
       onSheetOpen(false);
+      queryClient.invalidateQueries({ queryKey: ["chats"] });
       dispatch(setActiveChat(data));
     },
     onError: function (error) {

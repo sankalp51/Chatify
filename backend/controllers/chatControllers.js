@@ -81,7 +81,7 @@ const createGroupChat = async (req, res, next) => {
         .json({ message: "Please fill in all the details" });
     }
 
-    let parsedUsers = JSON.parse(users);
+    let parsedUsers = users;
     if (parsedUsers.length < 2) {
       return res
         .status(400)
@@ -91,7 +91,7 @@ const createGroupChat = async (req, res, next) => {
     parsedUsers.push(req.user);
 
     const groupChatData = {
-      chatName: name,
+      name,
       users: parsedUsers,
       isGroupChat: true,
       groupAdmin: req.user,

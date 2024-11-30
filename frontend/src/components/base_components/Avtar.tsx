@@ -10,7 +10,7 @@ export default function Avtar({ name, profileUrl }: Props) {
   const lastInitial = name.split(" ")[1].charAt(0).toUpperCase();
   return (
     <Avatar>
-      <AvatarImage src={profileUrl} />
+      <AvatarImage src={profileUrl}/>
       <AvatarFallback>{`${firstInitial}${lastInitial}`}</AvatarFallback>
     </Avatar>
   );

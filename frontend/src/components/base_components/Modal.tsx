@@ -13,8 +13,8 @@ type Props = {
   title: string;
   children: ReactNode;
   description: string;
-  open: boolean;
-  handleModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  open?: boolean;
+  handleModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function Modal({
@@ -26,7 +26,12 @@ export default function Modal({
   handleModalOpen,
 }: Props) {
   return (
-    <Dialog open={open} onOpenChange={(open) => handleModalOpen(open)}>
+    <Dialog
+      open={open}
+      onOpenChange={(open) => {
+        handleModalOpen && handleModalOpen(open);
+      }}
+    >
       <DialogTrigger>{trigger}</DialogTrigger>
       <DialogContent>
         <DialogHeader>

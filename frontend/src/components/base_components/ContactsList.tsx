@@ -96,7 +96,7 @@ export default function ContactsList() {
 
             {/* Data Display */}
             {data && data.length > 0 && (
-              <div className="space-y-2">
+              <div className="space-y-2 overflow-y-auto">
                 {data.map((user) => (
                   <UserListItem
                     onSheetOpen={setSheetOpen}

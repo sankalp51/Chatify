@@ -9,20 +9,19 @@ cloudinary.config({
 
 const handleFileUpload = async (file, path) => {
   try {
-    const res = await cloudinary.uploader.upload(
-      file, // Replace with the file path
-      {
-        transformation: [
-          { width: 1200, height: 800, crop: "limit" }, // Resize the image
-          { quality: "auto" }, // Adjust quality dynamically
-          { fetch_format: "auto" }, // Automatically select format
-        ],
-        folder: path,
-      }
-    );
+    const res = await cloudinary.uploader.upload(file, {
+      timeout: 60000,
+      transformation: [
+        { width: 1200, height: 800, crop: "limit" },
+        { quality: "auto" },
+        { fetch_format: "auto" },
+      ],
+      folder: path,
+    });
     return res;
   } catch (error) {
-    throw new Error(error);
+    console.log(error);
+    throw new Error(error.message);
   }
 };
 

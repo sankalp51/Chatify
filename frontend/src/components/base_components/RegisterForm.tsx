@@ -66,7 +66,7 @@ export default function RegisterForm() {
     },
     onError(err: AxiosError<{ message: string }>) {
       setIsSubmitting(false);
-      toast.error(err.response?.data.message);
+      toast.error(err.response?.data.message || "Something went wrong");
     },
   });
 
