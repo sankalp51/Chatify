@@ -10,7 +10,7 @@ cloudinary.config({
 const handleFileUpload = async (file, path) => {
   try {
     const res = await cloudinary.uploader.upload(file, {
-      timeout: 60000,
+      timeout: 65000,
       transformation: [
         { width: 1200, height: 800, crop: "limit" },
         { quality: "auto" },

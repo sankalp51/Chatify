@@ -1,6 +1,7 @@
 const User = require("../../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const sharp = require("sharp");
 const { handleFileUpload } = require("../../config/cloudinaryConfig");
 
 const login = async (req, res, next) => {
@@ -53,51 +54,73 @@ const login = async (req, res, next) => {
 const register = async (req, res, next) => {
   try {
     const { firstName, lastName, email, password, confirmPassword } = req.body;
+
+    // Validate request data
     if (!firstName || !lastName || !email || !password || !confirmPassword) {
       return res.status(400).json({ message: "Invalid data" });
     }
 
-    let dataURI;
-    if (req.file) {
-      const b64 = Buffer.from(req.file.buffer).toString("base64");
-      dataURI = "data:" + req.file.mimetype + ";base64," + b64;
-    }
-    const emailRegex = /^[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/;
+    // Validate email and password
+    const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
     if (!emailRegex.test(email) || password.length !== 8) {
-      return res.status(400).json({ message: "invalid data" });
+      return res
+        .status(400)
+        .json({
+          message: "Invalid email or password length must be 8 characters",
+        });
     }
 
     if (password.trim() !== confirmPassword.trim()) {
-      return res.status(400).json({ message: "passwords don't match" });
+      return res.status(400).json({ message: "Passwords don't match" });
     }
+
+    // Check if user already exists
     const userExists = await User.findOne({ email }).lean().exec();
     if (userExists) {
       return res.status(409).json({ message: "User already exists" });
     }
 
-    const hashPwd = await bcrypt.hash(password, 10);
+    let profilePicDataURI;
     let cloudRes;
-    if (req.file && dataURI) {
-      cloudRes = await handleFileUpload(dataURI, "chatify/profile-pics");
+
+
+    if (req.file) {
+      const compressedBuffer = await sharp(req.file.buffer)
+        .resize({ width: 300 }) 
+        .jpeg({ quality: 80 })
+        .toBuffer();
+
+      const b64 = compressedBuffer.toString("base64");
+      profilePicDataURI = `data:${req.file.mimetype};base64,${b64}`;
+
+      cloudRes = await handleFileUpload(
+        profilePicDataURI,
+        "chatify/profile-pics"
+      );
     }
+
+    // Hash the password
+    const hashPwd = await bcrypt.hash(password, 10);
+
+    // Create and save the new user
     const newUser = new User({
       email,
       firstName,
       lastName,
       password: hashPwd,
       profilePic: {
-        url: dataURI && cloudRes.secure_url,
-        id: dataURI && cloudRes.public_id,
+        url: cloudRes?.secure_url || null, // Use Cloudinary's URL if available
+        id: cloudRes?.public_id || null, // Use Cloudinary's public ID if available
       },
     });
 
     await newUser.save();
+
     res.status(201).json({ message: "Successfully registered" });
   } catch (error) {
     next(error);
   }
 };
-
 const logout = async (req, res, next) => {
   try {
     const cookies = req.cookies;

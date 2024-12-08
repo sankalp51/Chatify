@@ -10,7 +10,7 @@ import { queryClient } from "@/main";
 
 type Props = {
   user: User;
-  onSheetOpen: (open: boolean) => void;
+  onSheetOpen?: (open: boolean) => void;
 };
 
 export default function UserListItem({ user, onSheetOpen }: Props) {
@@ -32,7 +32,7 @@ export default function UserListItem({ user, onSheetOpen }: Props) {
       return response.data;
     },
     onSuccess: function (data) {
-      onSheetOpen(false);
+      onSheetOpen && onSheetOpen(false);
       queryClient.invalidateQueries({ queryKey: ["chats"] });
       dispatch(setActiveChat(data));
     },

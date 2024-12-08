@@ -13,6 +13,6 @@ router.get("/get-chats", fetchChats);
 router.post("/create-group", createGroupChat);
 router.patch("/rename-group", renameGroup);
 router.patch("/remove-member", removeFromGroup);
-router.post("/add-member", addToGroup);
+router.patch("/add-member", addToGroup);
 
 module.exports = router;
