@@ -11,6 +11,7 @@ const verifyJwt = require("./middlewares/verifyJwt");
 const userRoutes = require("./routes/userRoutes");
 const cookieParser = require("cookie-parser");
 const chatRoutes = require("./routes/chatRoutes");
+const messageRoutes = require("./routes/messageRoutes");
 const { Server } = require("socket.io");
 const { createServer } = require("http");
 require("dotenv").config();
@@ -42,6 +43,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/users", verifyJwt, userRoutes);
 app.use("/api/chats", verifyJwt, chatRoutes);
+app.use("/api/messages", verifyJwt, messageRoutes);
 
 app.all("*", (req, res) => {
   if (req.accepts("html")) {

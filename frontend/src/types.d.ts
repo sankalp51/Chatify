@@ -11,11 +11,6 @@ declare type User = {
   updatedAt: string;
 };
 
-declare type Message = {
-  sender: User;
-  content: string;
-  chat: Chat;
-};
 
 declare type Chat = {
   _id: string;
@@ -24,7 +19,11 @@ declare type Chat = {
   users: User[];
   createdAt: string;
   groupAdmin?: User;
-  latestMessage?: Message;
+  latestMessage?: {
+    sender: User;
+    content: string;
+    chat: Chat;
+  };
   updatedAt: string;
   __v?: number;
 };
@@ -32,4 +31,20 @@ declare type Chat = {
 declare type AuthPayload = {
   accessToken: string;
   user: User;
+};
+
+type Sender = Pick<User, "_id" | "firstName" | "lastName" | "profilePic">;
+
+type ChatWithUsers = Omit<Chat, "users"> & {
+  users: Sender[];
+};
+
+type Message = {
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  sender: Sender;
+  content: string;
+  chat: ChatWithUsers;
 };
