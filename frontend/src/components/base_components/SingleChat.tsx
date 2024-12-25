@@ -12,6 +12,7 @@ import Spinner from "./Spinner";
 import ChatIntro from "./ChatIntro";
 import { useEffect } from "react";
 import MessageArea from "./MessageArea";
+import { socket } from "../../socket";
 
 export default function SingleChat() {
   const user = useAppSelector((state) => state.auth.user);
@@ -40,6 +41,7 @@ export default function SingleChat() {
 
   useEffect(() => {
     if (selectedChat) {
+      socket.emit("join chat", selectedChat?._id);
       refetch();
     }
   }, [selectedChat, refetch]);

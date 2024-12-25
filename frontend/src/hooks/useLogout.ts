@@ -4,6 +4,7 @@ import { setLogout } from "@/redux/features/authSlics";
 import { api } from "@/utils/axios";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
+import { socket } from "../socket";
 
 export default function useLogout() {
   const dispatch = useAppDispatch();
@@ -16,6 +17,7 @@ export default function useLogout() {
       });
       toast.success("Successfully logged out");
       dispatch(setLogout());
+      socket.disconnect();
       navigate("/auth");
     } catch (error) {
       if (error instanceof AxiosError) {

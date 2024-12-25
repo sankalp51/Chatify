@@ -16,6 +16,8 @@ import {
 } from "@/utils/chatLogic";
 import ToolTip from "./ToolTip";
 import Avtar from "./Avtar";
+import { socket } from "../../socket";
+import Typing from "./Typing";
 
 type Props = {
   messages: Message[];
@@ -26,10 +28,24 @@ export default function MessageArea({ messages }: Props) {
   const [newMessage, setNewMessage] = useState("");
   const [allMessages, setAllMessages] = useState(messages);
   const messageRef = useRef<HTMLSpanElement>(null);
+  const [typing, setTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
 
   const axios = useAxiosPrivate();
   const selectedChat = useAppSelector((state) => state.activeChat.activeChat);
   const activeUser = useAppSelector((state) => state.auth.user);
+
+  useEffect(() => {
+    socket.on("is typing", () => {
+      console.log("something");
+      setIsTyping(true);
+    });
+    socket.on("typing stopped", () => setIsTyping(false));
+    return () => {
+      socket.off("is typing");
+      socket.off("typing stopped");
+    };
+  }, []);
 
   useEffect(() => {
     if (messageRef.current) {
@@ -37,9 +53,23 @@ export default function MessageArea({ messages }: Props) {
     }
   }, [allMessages]);
 
+  useEffect(() => {
+    socket.on("message received", (message: Message) => {
+      console.log(message);
+      if (!selectedChat || selectedChat._id !== message.chat._id) {
+        //do something
+      }
+      setAllMessages((prevState) => [...prevState, message]);
+    });
+    return () => {
+      socket.off("message received");
+    };
+  });
+
   const { mutate } = useMutation({
     mutationFn: async function (message: string) {
       try {
+        socket.emit("stop typing", selectedChat?._id);
         const response = await axios.post<Message>(
           "/api/messages/new-message",
           {
@@ -60,6 +90,7 @@ export default function MessageArea({ messages }: Props) {
       }
     },
     onSuccess: function (data) {
+      socket.emit("new message", data);
       setAllMessages([...allMessages, data!]);
     },
     onError: function (error) {
@@ -69,6 +100,18 @@ export default function MessageArea({ messages }: Props) {
 
   const typingHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setNewMessage(e.target.value);
+    setTyping(true);
+    socket.emit("typing", selectedChat?._id);
+    let timeNow = new Date().getTime();
+    let timeLength = 3000;
+
+    setTimeout(() => {
+      let currentTime = new Date().getTime();
+      let timeDiff = currentTime - timeNow;
+      if (timeDiff >= timeLength && typing) {
+        socket.emit("stop typing", selectedChat?._id);
+      }
+    }, timeLength);
   };
   const handleEnterClick = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key == "Enter" && newMessage.length) {
@@ -132,6 +175,7 @@ export default function MessageArea({ messages }: Props) {
             </div>
           );
         })}
+        {isTyping && <Typing />}
       </div>
       <div className="self-end w-full justify-center items-center gap-2 p-2 flex h-[10%] bg-secondary rounded-md">
         <Input
