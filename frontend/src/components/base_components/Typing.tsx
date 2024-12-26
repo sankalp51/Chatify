@@ -10,9 +10,19 @@ export default function Typing() {
 
   return (
     <div
-      // Adjust the classes below to fit your design / theme
-      className="m-2 rounded-[20px] py-[15px] px-[15px] bg-secondary w-[15%] md:w-[11%]"
       ref={bubbleRef}
+      className="
+        m-2 
+        inline-block 
+        rounded-[20px] 
+        py-[15px] 
+        px-[15px] 
+        bg-secondary 
+        max-w-[80%]     
+        sm:max-w-[60%]  
+        md:max-w-[40%]  
+        lg:max-w-[30%]  
+      "
     >
       {/* Typing dots */}
       <div className="flex items-center space-x-2">
