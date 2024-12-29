@@ -16,7 +16,7 @@ import { useContext } from "react";
 import { ResetPasswordContext } from "@/context/ResetPasswordContext";
 
 export default function ResetPassword() {
-  const { resetPassword } = useContext(ResetPasswordContext);
+  const { resetPassword, setResetPassword } = useContext(ResetPasswordContext);
   const navigate = useNavigate();
   const [steps, setSteps] = useState({
     isEmailProvided: false,
@@ -143,7 +143,7 @@ export default function ResetPassword() {
       });
       toast.success(response.data.message);
       setSteps((prev) => ({ ...prev, isPasswordReset: true }));
-      navigate("/auth");
+      setResetPassword(false);
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(error.response?.data.message);
