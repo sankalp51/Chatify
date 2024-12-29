@@ -94,7 +94,7 @@ export default function LoginForm() {
         <p className="text-red-600 text-sm">{errors.password.message}</p>
       )}
 
-      <Link className="text-right text-blue-500" to="#">
+      <Link className="text-right text-blue-500" to="/otp">
         Forgot password?
       </Link>
       <Button className="bg-blue-500 text-white hover:bg-blue-600">

@@ -14,6 +14,7 @@ const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const { Server } = require("socket.io");
 const { createServer } = require("http");
+const resetPasswordRoutes = require("./routes/resetPasswordRoutes");
 require("dotenv").config();
 
 const app = express();
@@ -46,6 +47,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/forgot-password", resetPasswordRoutes);
 app.use("/api/users", verifyJwt, userRoutes);
 app.use("/api/chats", verifyJwt, chatRoutes);
 app.use("/api/messages", verifyJwt, messageRoutes);

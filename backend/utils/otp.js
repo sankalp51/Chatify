@@ -3,16 +3,21 @@ const redisClient = require("../config/redisConfig");
 
 const generateOtp = async (id) => {
   try {
+    // Generate a 6-digit OTP
     let otp = "";
     while (otp.length !== 6) {
-      let randomInt = crypto.randomInt(0, 10);
+      const randomInt = crypto.randomInt(0, 10);
       if (!otp.includes(randomInt)) {
         otp += randomInt;
       }
     }
-    await redisClient.set(``);
+
+    const ttl = 120;
+    await redisClient.set(`user:${id}`, otp, "EX", ttl);
+    return otp;
   } catch (error) {
-    throw new Error(error);
+    console.error("Error generating OTP:", error.message);
+    throw new Error("Failed to generate OTP");
   }
 };
 

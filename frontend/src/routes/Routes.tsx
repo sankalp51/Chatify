@@ -4,6 +4,7 @@ import Auth from "@/pages/Auth";
 import AuthLayout from "@/layouts/AuthLayout";
 import Home from "@/pages/Home";
 import PersistLogin from "@/layouts/PersistLogin";
+import ResetPassword from "@/pages/ResetPassword";
 const router = createBrowserRouter(
   [
     {
@@ -13,6 +14,10 @@ const router = createBrowserRouter(
         {
           path: "/auth",
           element: <Auth />,
+        },
+        {
+          path: "/otp",
+          element: <ResetPassword />,
         },
         {
           element: <PersistLogin />,
