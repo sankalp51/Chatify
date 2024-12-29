@@ -19,14 +19,14 @@ const createChat = async (req, res, next) => {
         { users: { $elemMatch: { $eq: userId } } },
       ],
     })
-      .populate("users")
+      .populate([{ path: "users", select: "-password -refreshToken" }])
       .populate("latestMessage");
 
     if (chat) {
-      chat = await Chat.findOne({ _id: chat._id }).populate(
-        "users",
-        "-password -refreshToken"
-      );
+      chat = await Chat.findOne({ _id: chat._id }).populate([
+        { path: "users", select: "-password -refreshToken" },
+      ]);
+
       return res.status(200).json(chat);
     }
 
@@ -38,10 +38,9 @@ const createChat = async (req, res, next) => {
     };
 
     const createdChat = await Chat.create(chatData);
-    const fullChat = await Chat.findOne({ _id: createdChat._id }).populate(
-      "users",
-      "-password -refreshToken"
-    );
+    const fullChat = await Chat.findOne({ _id: createdChat._id }).populate([
+      { path: "users", select: "-password -refreshToken" },
+    ]);
 
     res.status(200).json(fullChat);
   } catch (error) {
@@ -55,8 +54,8 @@ const fetchChats = async (req, res, next) => {
     let chats = await Chat.find({
       users: { $elemMatch: { $eq: req.user } },
     })
-      .populate("users")
-      .populate("groupAdmin")
+      .populate([{ path: "users", select: "-password -refreshToken" }])
+      .populate([{ path: "groupAdmin", select: "-password -refreshToken" }])
       .populate("latestMessage")
       .sort({ updatedAt: -1 });
 
@@ -98,10 +97,10 @@ const createGroupChat = async (req, res, next) => {
     };
 
     const createdChat = await Chat.create(groupChatData);
-    const fullChat = await Chat.findOne({ _id: createdChat._id }).populate(
-      "users",
-      "-password -refreshToken"
-    );
+    const fullChat = await Chat.findOne({ _id: createdChat._id }).populate([
+      { path: "users", select: "-password -refreshToken" },
+    ]);
+
     res.status(201).json(fullChat);
   } catch (error) {
     next(error);
@@ -128,8 +127,8 @@ const renameGroup = async (req, res, next) => {
     }
 
     const fullChat = await Chat.findOne({ _id: updatedChat._id })
-      .populate("users", "-password -refreshToken")
-      .populate("groupAdmin", "-password -refreshToken");
+      .populate([{ path: "users", select: "-password -refreshToken" }])
+      .populate([{ path: "groupAdmin", select: "-password -refreshToken" }]);
 
     res.status(200).json(fullChat);
   } catch (error) {

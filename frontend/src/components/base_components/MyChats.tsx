@@ -11,6 +11,7 @@ import Modal from "./Modal";
 import { setChats } from "@/redux/features/chatSlice";
 import CreateGroupForm from "./CreateGroupForm";
 import { useState } from "react";
+import { formatDistanceToNow } from "date-fns";
 
 export default function MyChats() {
   const axios = useAxiosPrivate();
@@ -73,11 +74,42 @@ export default function MyChats() {
                 <div
                   key={chat._id}
                   onClick={() => dispatch(setActiveChat(chat))}
-                  className={`cursor-pointer bg-muted px-3 py-2 rounded-lg ${
-                    selectedChat?._id === chat._id && "bg-primary text-white"
+                  className={`cursor-pointer bg-muted px-4 py-3 rounded-lg mb-2 transition-all duration-200 ${
+                    selectedChat?._id === chat._id
+                      ? "bg-primary text-white shadow-md"
+                      : "hover:bg-secondary hover:shadow-sm"
                   }`}
                 >
-                  {!chat.isGroupChat ? getSender(auth!, chat.users) : chat.name}
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-lg">
+                      {!chat.isGroupChat
+                        ? getSender(auth!, chat.users)
+                        : chat.name}
+                    </span>
+                    <span className="text-sm">
+                      {chat.latestMessage?.createdAt
+                        ? formatDistanceToNow(
+                            new Date(chat.latestMessage.createdAt),
+                            {
+                              addSuffix: true,
+                            }
+                          )
+                        : ""}
+                    </span>
+                  </div>
+                  <p className="text-sm truncate">
+                    {chat.latestMessage ? (
+                      <>
+                        <span className="font-bold">
+                          {chat.latestMessage.sender.firstName}
+                        </span>{" "}
+                        :&nbsp;
+                        {chat.latestMessage.content}
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </p>
                 </div>
               ))}
           </div>

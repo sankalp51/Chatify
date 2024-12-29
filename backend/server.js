@@ -67,6 +67,10 @@ io.on("connect", (socket) => {
     socket.join(room);
   });
 
+  socket.on("leave room", (room) => {
+    socket.leave(room);
+  });
+
   socket.on("new message", (data) => {
     if (!data.chat.users) return;
     data.chat.users.forEach((user) => {
@@ -78,11 +82,15 @@ io.on("connect", (socket) => {
   });
 
   socket.on("typing", (room) => {
-    socket.in(room).emit("is typing");
+    if (room) {
+      socket.in(room).emit("is typing");
+    }
   });
 
   socket.on("stop typing", (room) => {
-    socket.in(room).emit("typing stopped");
+    if (room) {
+      socket.in(room).emit("typing stopped");
+    }
   });
 });
 

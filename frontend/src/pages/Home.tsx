@@ -7,10 +7,17 @@ import { useAppSelector } from "@/redux/store";
 export default function Home() {
   const activeuser = useAppSelector((state) => state.auth.user);
   useEffect(() => {
-    console.log(socket.connected);
+    if (!activeuser) {
+      return;
+    }
+    socket.connect();
     socket.emit("setup", activeuser);
-    
-  }, []);
+
+    return () => {
+      socket.off("setup");
+      socket.disconnect();
+    };
+  });
   return (
     <section className="w-full h-full flex justify-center items-center gap-4">
       <MyChats />

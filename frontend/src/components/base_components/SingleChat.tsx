@@ -44,6 +44,10 @@ export default function SingleChat() {
       socket.emit("join chat", selectedChat?._id);
       refetch();
     }
+    return () => {
+      socket.off("join chat");
+      socket.emit("leave room", selectedChat?._id);
+    };
   }, [selectedChat, refetch]);
 
   return (

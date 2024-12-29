@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { ChangeEvent, KeyboardEvent, useState, useEffect, useRef } from "react";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
-import { useAppSelector } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
@@ -18,6 +18,11 @@ import ToolTip from "./ToolTip";
 import Avtar from "./Avtar";
 import { socket } from "../../socket";
 import Typing from "./Typing";
+import {
+  addNotification,
+  removeNotification,
+} from "@/redux/features/notificationsSlice";
+import { queryClient } from "@/main";
 
 type Props = {
   messages: Message[];
@@ -34,10 +39,22 @@ export default function MessageArea({ messages }: Props) {
   const axios = useAxiosPrivate();
   const selectedChat = useAppSelector((state) => state.activeChat.activeChat);
   const activeUser = useAppSelector((state) => state.auth.user);
+  const notifications = useAppSelector(
+    (state) => state.notification.notifications
+  );
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const thisChatNotification = notifications?.find(
+      (ntf) => ntf.chat._id === selectedChat?._id
+    );
+    if (thisChatNotification) {
+      dispatch(removeNotification(thisChatNotification?._id));
+    }
+  }, []);
 
   useEffect(() => {
     socket.on("is typing", () => {
-      console.log("something");
       setIsTyping(true);
     });
     socket.on("typing stopped", () => setIsTyping(false));
@@ -55,16 +72,18 @@ export default function MessageArea({ messages }: Props) {
 
   useEffect(() => {
     socket.on("message received", (message: Message) => {
-      console.log(message);
-      if (!selectedChat || selectedChat._id !== message.chat._id) {
-        //do something
+      queryClient.invalidateQueries({ queryKey: ["chats"] });
+      if (!selectedChat || selectedChat?._id !== message.chat._id) {
+        dispatch(addNotification(message));
+        return;
       }
       setAllMessages((prevState) => [...prevState, message]);
     });
+
     return () => {
       socket.off("message received");
     };
-  });
+  }, [selectedChat, notifications]);
 
   const { mutate } = useMutation({
     mutationFn: async function (message: string) {
@@ -100,19 +119,22 @@ export default function MessageArea({ messages }: Props) {
 
   const typingHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setNewMessage(e.target.value);
-    setTyping(true);
-    socket.emit("typing", selectedChat?._id);
-    let timeNow = new Date().getTime();
-    let timeLength = 3000;
+    if (!typing) {
+      setTyping(true);
+      socket.emit("typing", selectedChat?._id);
+    }
+    const lastTypingTime = new Date().getTime();
+    const typingTimeout = 3000;
 
     setTimeout(() => {
-      let currentTime = new Date().getTime();
-      let timeDiff = currentTime - timeNow;
-      if (timeDiff >= timeLength && typing) {
+      const now = new Date().getTime();
+      if (now - lastTypingTime >= typingTimeout && typing) {
+        setTyping(false);
         socket.emit("stop typing", selectedChat?._id);
       }
-    }, timeLength);
+    }, typingTimeout);
   };
+
   const handleEnterClick = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key == "Enter" && newMessage.length) {
       mutate(newMessage);

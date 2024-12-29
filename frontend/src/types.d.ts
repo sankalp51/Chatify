@@ -23,7 +23,10 @@ declare type Chat = {
     sender: User;
     content: string;
     chat: Chat;
+    createdAt: string;
+    updatedAt: string;
   };
+  createdAt: string;
   updatedAt: string;
   __v?: number;
 };
@@ -47,4 +50,6 @@ type Message = {
   sender: Sender;
   content: string;
   chat: ChatWithUsers;
+  createdAt: string;
+  updatedAt: string;
 };
