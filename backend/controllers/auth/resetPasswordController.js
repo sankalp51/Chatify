@@ -94,6 +94,7 @@ const resetPassword = async (req, res, next) => {
 
     const hashPwd = await bcrypt.hash(newPassword, 10);
     await User.findOneAndUpdate({ email }, { password: hashPwd });
+    await redisClient.del(`user:${user._id}`)
     res.status(200).json({ message: "Password updated successfully" });
   } catch (error) {
     next(error);

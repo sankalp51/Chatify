@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -14,6 +13,8 @@ import { AxiosError } from "axios";
 import { useAppDispatch } from "@/redux/store";
 import { setLogIn } from "@/redux/features/authSlics";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { ResetPasswordContext } from "@/context/ResetPasswordContext";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email" }),
@@ -23,6 +24,7 @@ const loginSchema = z.object({
 type Inputs = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
+  const { setResetPassword } = useContext(ResetPasswordContext);
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const {
@@ -94,9 +96,16 @@ export default function LoginForm() {
         <p className="text-red-600 text-sm">{errors.password.message}</p>
       )}
 
-      <Link className="text-right text-blue-500" to="/otp">
+      <Button
+        type="button"
+        className="text-right text-blue-500 bg-transparent outline-none hover:bg-transparent self-end shadow-none"
+        onClick={() => {
+          setResetPassword(true);
+          navigate("/reset-password");
+        }}
+      >
         Forgot password?
-      </Link>
+      </Button>
       <Button className="bg-blue-500 text-white hover:bg-blue-600">
         Login
       </Button>
