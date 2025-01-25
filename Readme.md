@@ -55,7 +55,7 @@ cd chatify
 1. **Navigate to the server directory:**
 
     ```bash
-    cd server
+    cd backend
     ```
 
 2. **Install Dependencies:**
@@ -93,7 +93,7 @@ cd chatify
 1. **Navigate to the client directory:**
 
     ```bash
-    cd ./client
+    cd ./frontend
     ```
 
 2. **Install Dependencies:**
@@ -121,7 +121,7 @@ cd chatify
 - **Navigate to the server directory:**
 
     ```bash
-    cd ./server
+    cd ./backend
     ```
 
 
