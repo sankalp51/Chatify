@@ -21,7 +21,8 @@ A real-time chat application built using the MERN stack (MongoDB, Express.js, Re
 - **React Router DOM**: Declarative routing for React.
 - **Socket.io Client**: Real-time bidirectional event-based communication.
 - **Tailwind CSS**: Utility-first CSS framework.
-- **DaisyUI**: Tailwind CSS Components.
+- **ShadCN**: Prebuilt Components.
+- **Tanstack Query**: Powerfull data fetching and mutation library.
 
 ### Back-End
 
@@ -33,6 +34,7 @@ A real-time chat application built using the MERN stack (MongoDB, Express.js, Re
 - **JSON Web Tokens (JWT)**: Secure authentication.
 - **Bcrypt**: Password hashing function.
 - **Dotenv**: Loads environment variables from a `.env` file.
+- **ioredis**: A redis client to interact with the redis store.
 
 ## Prerequisites
 
