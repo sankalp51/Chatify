@@ -21,7 +21,14 @@ A real-time chat application built using the MERN stack (MongoDB, Express.js, Re
 - **React Router DOM**: Declarative routing for React.
 - **Socket.io Client**: Real-time bidirectional event-based communication.
 - **Tailwind CSS**: Utility-first CSS framework.
-- **DaisyUI**: Tailwind CSS Components.
+- **ShadCN**: Prebuilt Components.
+- **Tanstack Query**: Powerful data fetching and mutation library.
+- **Framer Motion**: Animation library for React.
+- **Lucide React**: Icon library.
+- **Zod**: Schema validation library.
+- **React Hook Form**: Library for forms and validation.
+- **Sonner**: Notification library.
+- **Input OTP**: OTP input field.
 
 ### Back-End
 
@@ -31,8 +38,13 @@ A real-time chat application built using the MERN stack (MongoDB, Express.js, Re
 - **Mongoose**: MongoDB object modeling tool.
 - **Socket.io**: Enables real-time, bidirectional communication.
 - **JSON Web Tokens (JWT)**: Secure authentication.
-- **Bcrypt**: Password hashing function.
+- **Bcrypt.js**: Password hashing function.
 - **Dotenv**: Loads environment variables from a `.env` file.
+- **Ioredis**: Redis client for session and data caching.
+- **Cloudinary**: Cloud storage for media assets.
+- **Multer**: Middleware for handling file uploads.
+- **Nodemailer**: Email sending library.
+- **Sharp**: Image processing library.
 
 ## Prerequisites
 
@@ -53,7 +65,7 @@ cd chatify
 1. **Navigate to the server directory:**
 
     ```bash
-    cd server
+    cd backend
     ```
 
 2. **Install Dependencies:**
@@ -70,17 +82,14 @@ cd chatify
     DATABASE_URL=your-mongodb-connection-string
     ACCESS_TOKEN_SECRET=your-access-token-secret
     REFRESH_TOKEN_SECRET=your-refresh-token-secret
+    REDIS_URL=your-redis-connection-string
+    CLOUDINARY_URL=your-cloudinary-connection-string
+    EMAIL_HOST=your-email-host
+    EMAIL_USER=your-email-user
+    EMAIL_PASS=your-email-password
     ```
 
-4. **Create a `.env` File:**
-
-    Create a `.env` file in the client directory and add the following:
-
-    ```env
-    VITE_API_BASE_URL=your-rest-api-base-url
-    ```
-
-5. **Start the Server:**
+4. **Start the Server:**
 
     ```bash
     npm run dev
@@ -91,7 +100,7 @@ cd chatify
 1. **Navigate to the client directory:**
 
     ```bash
-    cd ./client
+    cd ./frontend
     ```
 
 2. **Install Dependencies:**
@@ -100,7 +109,15 @@ cd chatify
     npm install
     ```
 
-3. **Start the Client:**
+3. **Create a `.env` File:**
+
+    Create a `.env` file in the client directory and add the following:
+
+    ```env
+    VITE_API_BASE_URL=your-rest-api-base-url
+    ```
+
+4. **Start the Client:**
 
     ```bash
     npm run dev
@@ -119,9 +136,8 @@ cd chatify
 - **Navigate to the server directory:**
 
     ```bash
-    cd ./server
+    cd ./backend
     ```
-
 
 - **Start Server in Development Mode:**
 
@@ -160,43 +176,60 @@ cd chatify
 ### Client Dependencies
 
 - **@reduxjs/toolkit**
+- **@hookform/resolvers**
+- **@tanstack/react-query**
 - **axios**
 - **classnames**
+- **clsx**
 - **date-fns**
 - **emoji-picker-react**
-- **lodash.debounce**
+- **framer-motion**
+- **input-otp**
+- **lucide-react**
 - **react**
 - **react-dom**
+- **react-hook-form**
 - **react-icons**
 - **react-redux**
 - **react-router-dom**
 - **socket.io-client**
 - **sonner**
+- **tailwind-merge**
+- **tailwindcss-animate**
+- **zod**
 
 ### Client Dev Dependencies
 
+- **@eslint/js**
+- **@types/node**
 - **@types/react**
 - **@types/react-dom**
 - **@vitejs/plugin-react**
 - **autoprefixer**
-- **daisyui**
 - **eslint**
-- **eslint-plugin-react**
 - **eslint-plugin-react-hooks**
 - **eslint-plugin-react-refresh**
+- **globals**
 - **postcss**
 - **tailwindcss**
+- **typescript**
+- **typescript-eslint**
 - **vite**
 
 ### Server Dependencies
 
-- **bcrypt**
+- **bcryptjs**
+- **cloudinary**
 - **cookie-parser**
 - **cors**
 - **dotenv**
 - **express**
+- **ioredis**
 - **jsonwebtoken**
 - **mongoose**
+- **multer**
+- **nodemailer**
+- **sharp**
 - **socket.io**
 
 ## License
@@ -214,3 +247,4 @@ For any questions or suggestions, please contact [sankalp.kalangutkar31@gmail.co
 ---
 
 **Note:** Replace placeholders like `your-mongodb-connection-string`, `your-jwt-secret`, `path/to/your/image.png`, and contact information with your actual details.
+
