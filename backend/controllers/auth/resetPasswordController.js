@@ -17,6 +17,7 @@ const verifyEmail = async (req, res, next) => {
       return res.status(404).json({ message: "No such user exists" });
     }
 
+    await redisClient.set(`user:${email}`, JSON.stringify(user));
     const otp = await generateOtp(user?._id);
     const emailTemplate = OtpEmailTemplate(otp);
     transporter
@@ -40,7 +41,7 @@ const verifyOtp = async (req, res, next) => {
       return res.status(400).json({ message: "Invalid OTP provided" });
     }
 
-    const user = await User.findOne({ email }).lean().exec();
+    const user = JSON.parse(await redisClient.get(`user:${email}`));
     if (!user) {
       return res.status(404).json({ message: "Invalid email provided" });
     }
@@ -49,7 +50,6 @@ const verifyOtp = async (req, res, next) => {
 
     const fetchOtp = await redisClient.get(key);
     if (!fetchOtp) {
-        console.log(fetchOtp)
       return res.status(400).json({ message: "OTP has expired" });
     }
 
@@ -59,7 +59,7 @@ const verifyOtp = async (req, res, next) => {
 
     await Promise.all([
       redisClient.del(key),
-      redisClient.set(`user:${user._id}`, "valid"),
+      redisClient.set(`user:${user._id}`, "valid", "EX", 120),
     ]);
 
     res.status(200).json({ message: "OTP verified successfully!" });
@@ -76,7 +76,7 @@ const resetPassword = async (req, res, next) => {
         .status(400)
         .json({ message: "Not allowed to reset the password" });
     }
-    const user = await User.findOne({ email }).lean().exec();
+    const user = JSON.parse(await redisClient.get(`user:${email}`));
     if (!user) {
       return res.status(400).json({ message: "No such user exists" });
     }
@@ -94,7 +94,8 @@ const resetPassword = async (req, res, next) => {
 
     const hashPwd = await bcrypt.hash(newPassword, 10);
     await User.findOneAndUpdate({ email }, { password: hashPwd });
-    await redisClient.del(`user:${user._id}`)
+    await redisClient.del(`user:${user._id}`);
+    await redisClient.del(`user:${email}`);
     res.status(200).json({ message: "Password updated successfully" });
   } catch (error) {
     next(error);

@@ -5,14 +5,13 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { api } from "@/utils/axios";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import Spinner from "@/components/base_components/Spinner";
 import { Button } from "@/components/ui/button";
-import { useContext } from "react";
 import { ResetPasswordContext } from "@/context/ResetPasswordContext";
 
 export default function ResetPassword() {
@@ -72,7 +71,7 @@ export default function ResetPassword() {
 
   const handleOtpSubmit = async () => {
     try {
-      if (otp.length !== 6) {
+      if (otp.length !== 6 || isNaN(Number(otp))) {
         setOtpError(true);
         return;
       }
@@ -160,7 +159,6 @@ export default function ResetPassword() {
   return (
     <section className="w-full h-[calc(100vh-90px)] flex justify-center items-center">
       <div className="flex flex-col gap-6 w-full max-w-md shadow-md rounded-lg p-6 bg-secondary">
-        {/* Email Input Step */}
         {!steps.isEmailProvided && (
           <div className="w-full">
             <h1 className="text-2xl font-bold text-center mb-4">
@@ -189,7 +187,7 @@ export default function ResetPassword() {
               </span>
             )}
             <Button
-              disabled={isEmailVerifying}
+              disabled={!!isEmailVerifying}
               onClick={handleEmailSubmit}
               className="mt-4 w-full bg-blue-500 py-3 rounded-lg hover:bg-blue-600 transition duration-200 disabled:opacity-50"
             >
@@ -201,13 +199,14 @@ export default function ResetPassword() {
         {/* OTP Verification Step */}
         {steps.isEmailProvided && !steps.isOtpVerified && (
           <>
-            <h1 className="text-2xl font-bold text-gray-700 text-center">
+            <h1 className="text-2xl font-bold text-center">
               Verify Your Email
             </h1>
-            <p className="text-sm text-gray-600 text-center mb-6">
+            <p className="text-sm text-center mb-6">
               Enter the 6-digit code sent to your email.
             </p>
             <InputOTP
+              autoFocus
               maxLength={6}
               pattern={REGEXP_ONLY_DIGITS}
               value={otp}
@@ -233,7 +232,7 @@ export default function ResetPassword() {
             </InputOTP>
             <p className="text-sm text-center mt-4">
               Didn&apos;t receive a code?{" "}
-              <Button className="text-blue-600 font-medium hover:underline">
+              <Button className="text-blue-600 font-medium hover:underline outline-none bg-transparent">
                 Resend Code
               </Button>
             </p>
@@ -243,7 +242,7 @@ export default function ResetPassword() {
         {/* Password Reset Step */}
         {steps.isOtpVerified && !steps.isPasswordReset && (
           <>
-            <h1 className="text-2xl font-bold text-gray-700 text-center">
+            <h1 className="text-2xl font-bold text-center">
               Reset Your Password
             </h1>
             <Input
